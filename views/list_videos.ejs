@@ -1,0 +1,50 @@
+<!-- content
+			================================================== -->
+
+        <div class="container">
+
+
+            <div class="widget footer-widgets tag-widget">
+                <h4>作者</h4>
+                <ul class="tag-widget-list">
+                    <li><a href="#"><img alt="" src="images/head1.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head2.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head3.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head4.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head5.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head1.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head2.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head3.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head4.jpeg" style="width: 32px"> 瓜末莫</a></li>
+                    <li><a href="#"><img alt="" src="images/head5.jpeg" style="width: 32px"> 瓜末莫</a></li>
+
+
+                </ul>
+            </div>
+
+            <div class="row">
+
+
+                <% videos.forEach(function (video, index) { %>
+
+                <div class="work-post web-design brochures col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height: 155px">
+                    <div class="work-post-gal">
+                        <img alt="" src="<%= video.thumbnail ? video.thumbnail : video.thumbnail_v2 %>">
+                        <span class="jutou">剧透</span>
+                        <span class="lanpian">烂片</span>
+                        <span class="derution">15:32</span>
+                    </div>
+                    <div>
+                        <h6><%= video.title %></h6>
+                    </div>
+                </div>
+                <% }) %>
+
+            </div>
+            <div class="row">
+                <%- include page.ejs %>
+            </div>
+
+
+</div>
+<!-- End content -->

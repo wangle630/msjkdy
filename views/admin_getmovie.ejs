@@ -1,0 +1,269 @@
+<%- include header.ejs %>
+<script type="text/javascript" src="/js/admin.js"></script>
+
+
+<div class="container">
+    <div class="comment-form form-horizontal">
+        <hr/>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <h4 class="text-info">优酷</h4>
+
+                    <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtYoukuURL"
+                           value="http://v.youku.com/v_show/id_XMTU5OTk5OTQ0OA==.html?from=y1.9-3.1">
+                </div>
+                <div class="col-md-12">
+
+                    <button class="btn btn-info btn-sm" onclick="getYouKuData()">获取youku信息</button>
+                    <button class="btn btn-info btn-sm" onclick="saveYoukuInfo()">保存youku信息</button>
+                </div>
+
+                <div id="showYoukuInfo" class="col-md-12">
+                </div>
+
+                <div class="col-md-12">
+                    </br>
+                    <h5>视频类型</h5>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoType" id="inlineRadio1" value="fullfilm"> 完整电影
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoType" id="inlineRadio2" value="professional"> 专业讲解
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoType" id="inlineRadio3" value="complaint" > 烂片狂喷
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoType" id="inlineRadio4" value="minutes" checked> 分分钟看完
+                    </label>
+                </div>
+
+                <div class="col-md-12">
+                    </br>
+                    <h5>剧透级别</h5>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio1" value="0"> 无
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio2" value="30"> 少
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio3" value="50" checked> 中
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio4" value="80" > 多
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio5" value="100"> 严重
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="col-md-8">
+                    <input id="txtMovieName" type="text" name="name" class="input-sm" placeholder="电影名称" value="猎人">
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-default" onclick="getFenciByManual()">
+                        分词
+                    </button>
+                    <button class="btn btn-default" onclick="getDoubanListByManual()">
+                        豆瓣列表
+                    </button>
+                </div>
+
+                <!--获取imdb电影名称-->
+                <div class="col-md-8">
+                    <input id="txtImdbName" type="text" name="name" class="input-sm" placeholder="电影名称"
+                           value="imdb Name">
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-default" onclick="getImdbByManual()">
+                        imdb
+                    </button>
+                </div>
+
+
+             </div>
+
+        </div>
+        <div id="fenciResult" class="col-md-12">
+        </div>
+
+        <!--显示分词结果-->
+
+
+        <!--显示电影列表-->
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="panel panel-default" style="height: auto;">
+                    <div class="panel-heading">豆瓣筛选</div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--显示豆瓣电影信息-->
+        <div class="row">
+            <div class="col-md-6">
+                <div id="dblist">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="showDoubanInfo">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="showImdbInfo">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success btn-sm" onclick="saveMovieInfo()">保存电影信息</button>
+                <hr/>
+                <button class="btn btn-success btn-sm" onclick="saveMovieInfo()">获取豆瓣评论信息</button>
+                <hr/>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+
+    //豆瓣基本数据
+    var gDOUBANDATA = {}
+    //豆瓣短评论数据
+    var gDOUBANCOMMIT = []
+    //omdb基本数据
+    var gOMDBDATA = {}
+    //优酷基本信息
+    var gYOUKUDATA = {}
+    //合并后的电影信息
+    var gMOVIE = {}
+
+    //分词无结果，手动输入电影名称
+    function getFenciByManual() {
+        $('#fenciResult').html('');
+        fileFenciByBaidu($('#txtMovieName').val())
+        fielFenciByDot($('#txtMovieName').val())
+    }
+
+    //手动取得豆瓣列表
+    function getDoubanListByManual() {
+        getDouBanMovieList($('#txtMovieName').val())
+    }
+
+    function getImdbByManual() {
+        var title = $("#txtImdbName").val();
+        $('#showImdbInfo').html('');
+
+        getOmdbDetail(title, function (movieinfo) {
+            showImdbMovieInfo(movieinfo);
+        })
+    }
+
+    //点击图片获取某个电影，存入全局变量，并显示出来
+    function showMachMovie(doubanID) {
+
+        $('#showDoubanInfo').html('');
+        $('#showImdbInfo').html('');
+
+
+        gMOVIE = {};
+
+        getDoubanDetail(doubanID, function (movieinfo_douban) {
+            showDoubanMovieInfo(movieinfo_douban);
+            getOmdbDetail(movieinfo_douban.douban.original_title, function (movieinfo) {
+                showImdbMovieInfo(movieinfo);
+            })
+        })
+    }
+
+    //保存电影信息
+    function saveMovieInfo() {
+        if (gMOVIE.douban) {
+            $.post('/api/savemovieinfo', gMOVIE, function (data) {
+                alert(data);
+            });
+        } else {
+            alert('没有数据！(gMOVIE.id)')
+        }
+    }
+
+
+    //保存youku视频信息
+    function saveYoukuInfo() {
+        if (gMOVIE.douban) {
+            gYOUKUDATA.doubanid = gMOVIE.douban.id;
+            gYOUKUDATA.videoType = getRadioValue('radioVideoType');
+            gYOUKUDATA.videoSpoiler = getRadioValue('radioVideoSpoiler');
+            gYOUKUDATA.update = $.now();
+            gYOUKUDATA.source = 'youku';
+            $.post('/api/saveyoukuvideo', gYOUKUDATA, function (data) {
+                alert(data);
+            });
+        } else {
+            alert('没有电影数据！(gMOVIE.id)')
+        }
+    }
+
+
+    //通过URL、获取youku信息
+    function getYouKuData() {
+        var youkuurl = $("#txtYoukuURL").val();
+        if (youkuurl.length > 0) {
+            $('#showYoukuInfo').html('')
+            var arr1 = youkuurl.split("id_");
+            var arr2 = arr1[1].split("==");
+            var youkuid = arr2[0]
+            var url = 'http://openapi.youku.com/v2/videos/show_basic.json?video_id=' + youkuid + '&client_id=cf13550a4889b891'
+            $.ajax(url, {
+                dataType: 'jsonp'
+            }).done(function (data) {
+                gYOUKUDATA = data
+                if (gMOVIE.douban) {
+                    gYOUKUDATA.doubanid = gMOVIE.douban.id
+                    gYOUKUDATA.update = $.now()
+                }
+                $('#showYoukuInfo').append('<div class="col-md-5"><img src = "' + gYOUKUDATA.thumbnail + '"></img></div>')
+
+                $('#showYoukuInfo').append('<div class="col-md-7">id:' + gYOUKUDATA.id + '</br>')
+                $('#showYoukuInfo').append('title:' + gYOUKUDATA.title + '</br>')
+                $('#showYoukuInfo').append('user:' + gYOUKUDATA.user.name + '</br>')
+                $('#showYoukuInfo').append('view_count:' + gYOUKUDATA.view_count + '</br>')
+                $('#showYoukuInfo').append('豆瓣ID:' + gYOUKUDATA.doubanid + '</br></div>')
+                $('#txtMovieName').val(gYOUKUDATA.title)
+                console.log(gYOUKUDATA);
+                getFenciByManual();
+            }).fail(function () {
+                alert('查找失败');
+            });
+
+        } else {
+            alert('地址为空！！！')
+        }
+    }
+
+    function getRadioValue(radioname){
+        var value="";
+        var radio=document.getElementsByName(radioname);
+        for(var i=0;i<radio.length;i++){
+            if(radio[i].checked==true){
+                value = radio[i].value;
+                break;
+            }
+        }
+        return value;
+    }
+
+</script>
+
+<!--<%- include footer.ejs %>-->

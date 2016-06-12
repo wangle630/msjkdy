@@ -1,0 +1,31 @@
+<%- include header.ejs %>
+
+<div id="content">
+    <%- include banner.ejs %>
+
+    <!-- blog-box Banner -->
+    <div class="blog-box with-sidebar">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-9 single-post">
+                    <%- include detail_video_play.ejs %>
+                    <%- include detail_videos_bymovie.ejs %>
+                    <%- include detail_videos_byauthor.ejs %>
+                </div>
+
+                <div class="col-md-3 sidebar">
+                    <div class="sidebar-widgets">
+                        <%- include detail_movie_comment.ejs %>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- End content -->
+
+<%- include footer.ejs %>
