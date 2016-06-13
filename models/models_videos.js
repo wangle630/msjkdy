@@ -81,8 +81,9 @@ exports.updateVideoInfo = function (gYOUKUDATA, callback) {
                         update: gYOUKUDATA.update,
                         comment_count: gYOUKUDATA.comment_count,
                         down_count: gYOUKUDATA.down_count,
-                        view_count: gYOUKUDATA.view_count
-
+                        view_count: gYOUKUDATA.view_count,
+                        videoType: gYOUKUDATA.videoType,
+                        videoSpoiler: gYOUKUDATA.videoSpoiler
                     }
                 },
                 function (err, result) {
@@ -111,7 +112,7 @@ exports.getEighteenVideos = function(name, page, callback) {
                 mongodb.close();
                 return callback(err);
             }
-            var query = {};
+            var query = {videoType:{$ne:"fullfilm"}};
             if (name) {
                 query.name = name;
             }
