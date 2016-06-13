@@ -6,6 +6,10 @@ var mongodb = require('./db');
 var settings = require('../settings.js');
 
 
+
+
+
+
 //根据id查找电影信息
 exports.findVideoInfo = function (gYOUKUDATA, callback) {
     mongodb.open(function (err, db) {
@@ -97,6 +101,9 @@ exports.updateVideoInfo = function (gYOUKUDATA, callback) {
         })
     })
 }
+
+
+
 
 
 //一次获取18篇文章

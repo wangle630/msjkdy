@@ -3,9 +3,9 @@ var movie = require('../models/models_movies.js');
 
 //保存电影API
 exports.saveMovieInfo = function (req, res) {
-    req.setMaxListeners(0);
     movie.findMovieInfo(req.body, function (err, data) {
         if (err) {
+            console.log(err);
             res.send('电影查询出错了')
         } else if (data) {
             movie.updateMovieInfo(req.body, function (err, row) {

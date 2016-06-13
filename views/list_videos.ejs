@@ -30,9 +30,25 @@
                 <div class="work-post web-design brochures col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height: 155px">
                     <div class="work-post-gal">
                         <img alt="" src="<%= video.thumbnail ? video.thumbnail : video.thumbnail_v2 %>">
-                        <span class="jutou">剧透</span>
-                        <span class="lanpian">烂片</span>
-                        <span class="derution">15:32</span>
+                        <span class="jutou<%= video.videoSpoiler %>">剧透</span>
+
+
+                        <% if( video.videoType == 'professional') { %>
+                        <span class="lanpian">专业</span>
+                        <% } %>
+
+                        <% if( video.videoType == 'complaint') { %>
+                        <span class="lanpian">吐槽</span>
+                        <% } %>
+
+                        <% if( video.videoType == 'minutes') { %>
+                        <span class="lanpian">讲解</span>
+                        <% } %>
+
+
+
+
+                        <span class="derution"><%= video.duration %></span>
                     </div>
                     <div>
                         <h6><%= video.title %></h6>

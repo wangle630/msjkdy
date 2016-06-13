@@ -1488,19 +1488,70 @@ ul.device-list li.device4 {
     opacity: 0.5;
 }
 
-.work-post-gal span.jutou {
+.work-post-gal span.jutou0 {
      position: absolute;
      top: 0;
      left: 0;
      display: inline-block;
      color: #fff;
      padding: 3px 3px;
-     background: #cb1d1d;
+     background: #EED205;
      font-size: 4px;
      font-family: 'Open Sans', sans-serif;
      font-weight: 200;
-     opacity: 1;
  }
+
+.work-post-gal span.jutou30 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    color: #fff;
+    padding: 3px 3px;
+    background: #FFBB1C;
+    font-size: 4px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+}
+
+.work-post-gal span.jutou50 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    color: #fff;
+    padding: 3px 3px;
+    background: #FE9D01;
+    font-size: 4px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+}
+
+.work-post-gal span.jutou80 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    color: #fff;
+    padding: 3px 3px;
+    background: #BD7803;
+    font-size: 4px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+}
+
+.work-post-gal span.jutou100 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    color: #fff;
+    padding: 3px 3px;
+    background: #712704;
+    font-size: 4px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+}
 
 .work-post-gal span.lanpian {
     position: absolute;

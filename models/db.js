@@ -7,6 +7,10 @@ var settings = require('../settings.js'),
 module.exports = new Db(
     settings.db,
     new Server(settings.host,settings.port),
-    {safe : true}
+    {
+        safe : true,
+    }
 );
+
+
 

@@ -41,18 +41,21 @@ exports.videos = function (req, res) {
         if (err) {
             movies = [];
         }
-        console.log(total)
-        res.render('videos', {
-            title: 'videos',
-            videos: videos,
-            total: total,
-            totalPage: Math.ceil(total/24),
-            page: page,
-            isFirstPage: (page - 1) == 0,
-            isLastPage: ((page - 1) * 24 + videos.length) == total,
-            user: req.session.user,
-            success: req.flash('success').toString(),
-            error: req.flash('error').toString()
-        });
+        if(videos){
+            console.log(total)
+            res.render('videos', {
+                title: 'videos',
+                videos: videos,
+                total: total,
+                totalPage: Math.ceil(total/24),
+                page: page,
+                isFirstPage: (page - 1) == 0,
+                isLastPage: ((page - 1) * 24 + videos.length) == total,
+                user: req.session.user,
+                success: req.flash('success').toString(),
+                error: req.flash('error').toString()
+            });
+        }
+
     });
 };

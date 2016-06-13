@@ -5,15 +5,22 @@
 var mongodb = require('./db');
 var settings = require('../settings.js');
 
+//有用户名密码的时候、先认证
+////db.authenticate('dbuser','123456',function(){
+//    db.collection(......){
+//}
+//})
 
 //根据id查找电影信息
 exports.findMovieInfo = function (gMOVIE, callback) {
     mongodb.open(function (err, db) {
         if (err) {
+            console.log(err);
             return callback(err);
         }
         db.collection(settings.col_movies, function (err, collection) {
             if (err) {
+
                 mongodb.close();
                 return callback(err);
             }
@@ -130,6 +137,7 @@ exports.getEighteenMovies = function(name, page, callback) {
             return callback(err);
         }
         //读取 posts 集合
+
         db.collection(settings.col_movies, function (err, collection) {
             if (err) {
                 mongodb.close();

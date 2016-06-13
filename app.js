@@ -54,8 +54,8 @@ app.use(function (err,req,res,next){
 
 
 var options = {
-  "host": "127.0.0.1",
-  "port": "6379",
+  "host": settings.host,
+  "port": settings.port,
   "ttl": 60 * 60 * 24 * 30,   //Session的有效期为30天
 };
 
