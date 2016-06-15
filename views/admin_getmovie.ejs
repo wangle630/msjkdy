@@ -10,7 +10,6 @@
             <div class="col-md-6">
                 <div class="col-md-12">
                     <h4 class="text-info">优酷</h4>
-
                     <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtYoukuURL"
                            value="http://v.youku.com/v_show/id_XMTU5OTk5OTQ0OA==.html?from=y1.9-3.1">
                 </div>
@@ -19,7 +18,6 @@
                     <button class="btn btn-info btn-sm" onclick="getYouKuData()">获取youku信息</button>
                     <button class="btn btn-info btn-sm" onclick="saveYoukuInfo()">保存youku信息</button>
                 </div>
-
                 <div id="showYoukuInfo" class="col-md-12">
                 </div>
 
@@ -79,13 +77,25 @@
 
                 <!--获取imdb电影名称-->
                 <div class="col-md-8">
-                    <input id="txtImdbName" type="text" name="name" class="input-sm" placeholder="电影名称"
+                    <input id="txtImdbName" type="text" name="name" class="input-sm"
                            value="imdb Name">
                 </div>
 
                 <div class="col-md-4">
-                    <button class="btn btn-default" onclick="getImdbByManual()">
-                        imdb
+                    <button class="btn btn-default" onclick="getImdbByName()">
+                        imdb by name
+                    </button>
+                </div>
+
+                <!--获取imdb电影名称-->
+                <div class="col-md-8">
+                    <input id="txtImdbID" type="text" name="name" class="input-sm"
+                           value="imdb ID">
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-default" onclick="getImdbByID()">
+                        imdb by ID
                     </button>
                 </div>
 
@@ -161,11 +171,21 @@
         getDouBanMovieList($('#txtMovieName').val())
     }
 
-    function getImdbByManual() {
+    function getImdbByName() {
         var title = $("#txtImdbName").val();
         $('#showImdbInfo').html('');
 
-        getOmdbDetail(title, function (movieinfo) {
+        getOmdbDetailByName(title, function (movieinfo) {
+            showImdbMovieInfo(movieinfo);
+        })
+    }
+
+
+    function getImdbByID() {
+        var title = $("#txtImdbID").val();
+        $('#showImdbInfo').html('');
+
+        getOmdbDetailByID(title, function (movieinfo) {
             showImdbMovieInfo(movieinfo);
         })
     }
@@ -181,7 +201,7 @@
 
         getDoubanDetail(doubanID, function (movieinfo_douban) {
             showDoubanMovieInfo(movieinfo_douban);
-            getOmdbDetail(movieinfo_douban.douban.original_title, function (movieinfo) {
+            getOmdbDetailByName(movieinfo_douban.douban.original_title, function (movieinfo) {
                 showImdbMovieInfo(movieinfo);
             })
         })
@@ -234,12 +254,22 @@
                     gYOUKUDATA.update = $.now()
                 }
                 $('#showYoukuInfo').append('<div class="col-md-5"><img src = "' + gYOUKUDATA.thumbnail + '"></img></div>')
+                $('#showYoukuInfo').append('<hr/>')
+                $('#showYoukuInfo').append('<div class="row">')
 
-                $('#showYoukuInfo').append('<div class="col-md-7">id:' + gYOUKUDATA.id + '</br>')
+
+                $('#showYoukuInfo').append('<div class="col-md-12 row"><h6>id:' + gYOUKUDATA.id + '</br>')
                 $('#showYoukuInfo').append('title:' + gYOUKUDATA.title + '</br>')
                 $('#showYoukuInfo').append('user:' + gYOUKUDATA.user.name + '</br>')
                 $('#showYoukuInfo').append('view_count:' + gYOUKUDATA.view_count + '</br>')
                 $('#showYoukuInfo').append('豆瓣ID:' + gYOUKUDATA.doubanid + '</br></div>')
+                $('#showYoukuInfo').append('作者名称:' +  gYOUKUDATA.user.name + '</br>')
+                $('#showYoukuInfo').append('作者链接:' +  gYOUKUDATA.user.link + '</br>')
+                $('#showYoukuInfo').append('作者ID:' +  gYOUKUDATA.user.id + '</br></h6>')
+                $('#showYoukuInfo').append('</div>')
+                $('#showYoukuInfo').append('</div>')
+
+
                 $('#txtMovieName').val(gYOUKUDATA.title)
                 console.log(gYOUKUDATA);
                 getFenciByManual();
@@ -266,4 +296,4 @@
 
 </script>
 
-<!--<%- include footer.ejs %>-->
+<%- include footer.ejs %>

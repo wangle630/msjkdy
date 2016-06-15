@@ -1,0 +1,75 @@
+<%- include header.ejs %>
+
+<div class="container">
+    <div class="comment-form form-horizontal">
+        <hr/>
+        <div class="row">
+            <div class="col-md-8">
+                <h5 class="text-info">作者姓名</h5>
+                <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtAuthorName" value="">
+
+                <h5 class="text-info">作者ID</h5>
+                <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtAuthorID" onkeyup=changeInputID(this) value="">
+
+                <h5 class="text-info">作者头像</h5>
+                <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtAuthorLogo" value="">
+
+                <h5 class="text-info">作者横幅</h5>
+                <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtAuthorBanner" value="">
+
+                <h5 class="text-info">作者Link</h5>
+                <input type="text" name="name" class="input-sm" placeholder="优酷URL" id="txtAuthorLink" value="">
+
+                <h5 class="text-info">作者描述</h5>
+                <textarea name="name" class="input-sm" placeholder="优酷URL" id="txtAuthorIntroduction" value=""></textarea>
+            </div>
+
+            <div class="col-md-4">
+                <button class="btn btn-info btn-sm" onclick="saveAuthor()">保存作者信息</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- include footer.ejs %>
+
+
+<script>
+
+
+    function changeInputID(obj){
+        $('#txtAuthorLogo').val('/author/' + obj.value + '_logo.jpeg')
+        $('#txtAuthorBanner').val('/author/' +obj.value +   '_banner.jpeg')
+    }
+
+
+    //保存作者信息视频信息
+    function saveAuthor() {
+
+        var gAUTHOR = {}
+
+
+        if($('#txtAuthorName').val()==''){
+            alert('作者姓名不能为空');
+            return false;
+        }
+
+        if($('#txtAuthorID').val()==''){
+            alert('作者ID不能为空');
+            return false;
+        }
+
+        gAUTHOR.authorName = $('#txtAuthorName').val()
+        gAUTHOR.authorID = $('#txtAuthorID').val()
+        gAUTHOR.authorLogo = $('#txtAuthorLogo').val()
+        gAUTHOR.authorBanner = $('#txtAuthorBanner').val()
+        gAUTHOR.authorLink = $('#txtAuthorLink').val()
+        gAUTHOR.authorIntroduction = $('#txtAuthorIntroduction').val()
+        gAUTHOR.update = $.now();
+
+        $.post('/api/saveauthor', gAUTHOR, function (data) {
+            alert(data);
+        });
+    }
+</script>

@@ -10,7 +10,7 @@ var settings = require('../settings.js');
 
 
 
-//根据id查找电影信息
+//根据id查找视频信息
 exports.findVideoInfo = function (gYOUKUDATA, callback) {
     mongodb.open(function (err, db) {
         if (err) {
@@ -35,20 +35,18 @@ exports.findVideoInfo = function (gYOUKUDATA, callback) {
 }
 
 
-//插入电影详细数据
+//插入视频详细数据
 exports.insertVideoInsert = function (gYOUKUDATA, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);//错误，返回err信息
         }
-        //读取 users集合
         db.collection(settings.col_videos, function (err, collection) {
             if (err) {
                 mongodb.close();
                 return callback(err);//错误，返回err信息
             }
-            //将用户信息插入users集合
             collection.insert(gYOUKUDATA, {
                 safe: true
             }, function (err, result) {
@@ -64,7 +62,7 @@ exports.insertVideoInsert = function (gYOUKUDATA, callback) {
 }
 
 
-//更新电影信息数据
+//更新视频信息数据
 exports.updateVideoInfo = function (gYOUKUDATA, callback) {
 
     //打开数据库
@@ -106,8 +104,8 @@ exports.updateVideoInfo = function (gYOUKUDATA, callback) {
 
 
 
-//一次获取18篇文章
-exports.getEighteenVideos = function(name, page, callback) {
+//一次获取18篇视频   第一个参数是作者
+exports.getEighteenVideos = function(authorID, page, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -120,8 +118,11 @@ exports.getEighteenVideos = function(name, page, callback) {
                 return callback(err);
             }
             var query = {videoType:{$ne:"fullfilm"}};
-            if (name) {
-                query.name = name;
+            if (authorID) {
+                query = {
+                    videoType:{$ne:"fullfilm"},
+                    'user.id':authorID
+                    };
             }
             //使用 count 返回特定查询的文档数 total
             collection.count(query, function (err, total) {
@@ -142,3 +143,95 @@ exports.getEighteenVideos = function(name, page, callback) {
         });
     });
 };
+
+
+
+//根据id查找作者信息
+exports.findAuthor = function (gAUTHOR, callback) {
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        db.collection(settings.col_authors, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            collection.findOne({
+                authorID: gAUTHOR.authorID
+            }, function (err, result) {
+                if (err) {
+                    mongodb.close();
+                    return callback(err);
+                }
+                callback(null, result);
+            })
+        })
+    })
+}
+
+
+//插入作者详细数据
+exports.insertAuthor = function (gAUTHOR, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+        db.collection(settings.col_authors, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.insert(gAUTHOR, {
+                safe: true
+            }, function (err, result) {
+                if (err) {
+                    mongodb.close();
+                    return callback(err);
+                }
+                callback(null, result);//成功！err为null，并返回存储后的用户文档
+
+            })
+        })
+    })
+}
+
+
+//更新视频信息数据
+exports.updateAuthor = function (gAUTHOR, callback) {
+
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+
+        db.collection(settings.col_authors, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.updateMany(
+                {authorID: gAUTHOR.authorID},
+                {
+                    $set: {
+                        update: gAUTHOR.update,
+                        authorName: gAUTHOR.authorName,
+                        authorLogo: gAUTHOR.authorLogo,
+                        authorBanner: gAUTHOR.authorBanner,
+                        authorLink: gAUTHOR.authorLink,
+                        authorIntroduction: gAUTHOR.authorIntroduction
+                    }
+                },
+                function (err, result) {
+                    if (err) {
+                        mongodb.close();
+                        return callback(err);
+                    }
+                    callback(null, result);//成功！err为null，并返回存储后的用户文档
+
+                })
+        })
+    })
+}

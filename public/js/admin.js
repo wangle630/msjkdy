@@ -103,7 +103,7 @@ function getDoubanDetail(alt, callback) {
 
 
 //获取omdb电影信息,并返回omdb结果的JSON对象//http://www.omdbapi.com/
-function getOmdbDetail(titles, callback) {
+function getOmdbDetailByName(titles, callback) {
     //titles.push(gMOVIE.douban.original_title)
     //for (var i = 0; i < titles.length; i++) {
         $.ajax({
@@ -131,6 +131,30 @@ function getOmdbDetail(titles, callback) {
 }
 
 
+//获取omdb电影信息,并返回omdb结果的JSON对象//http://www.omdbapi.com/
+function getOmdbDetailByID(titles, callback) {
+    $.ajax({
+            url: "http://www.omdbapi.com/",
+            data: {
+                i: titles,
+                plot: 'full',
+                tomatoes: true,
+                r: 'json'
+            },
+            success: function (omdbData) {
+                    gMOVIE.imdb = omdbData;
+                    callback(gMOVIE);
+            },
+            error: function (data) {
+                console.log(data)
+                callback(gMOVIE);
+
+            }
+        }
+    )
+}
+
+
 //根据gMOVIE合并后的JSON数据显示豆瓣电影信息
 function showDoubanMovieInfo(monvieinfo) {
     console.log(monvieinfo);
@@ -143,7 +167,7 @@ function showDoubanMovieInfo(monvieinfo) {
     $('#showDoubanInfo').append('导演:' + monvieinfo.douban.directors[0].name + '</br>')
     $('#showDoubanInfo').append('其它名:' + monvieinfo.douban.aka + '</br>')
     $('#showDoubanInfo').append('类型:' + monvieinfo.douban.genres + '</br>')
-    $('#showDoubanInfo').append('类型:' + monvieinfo.douban.genres + '</br>')
+    $('#showDoubanInfo').append('类型:' + monvieinfo.douban.subtype + '</br>')
 
 }
 
