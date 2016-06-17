@@ -23,7 +23,9 @@ module.exports = function(app){
     //视频列表
     app.get('/videos',video.videos);
     //根据作者打开视频列表
-    app.get('/videos/:author',video.videosByAuthor);
+    app.get('/videos/author/:author',video.videosByAuthor);
+    //观看视频
+    app.get('/videos/watch/:videoid',video.watchVideo);
 
 
     //－－－－－－－－－－－－－－－后台－－－－－－－－－－－－－－－－
@@ -51,7 +53,6 @@ function checkLogin(req,res,next){
         req.flash('error','未登录');
         res.redirect('/login');
         return;
-
     }
     next();
 }

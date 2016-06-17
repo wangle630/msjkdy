@@ -100,7 +100,7 @@ exports.videosByAuthor = function (req, res) {
         }
         if(videos){
             res.render('videos', {
-                title: req.params.author,
+                title: '/videos/author/' + req.params.author,
                 videos: videos,
                 total: total,
                 totalPage: Math.ceil(total/24),
@@ -115,3 +115,12 @@ exports.videosByAuthor = function (req, res) {
 
     });
 };
+
+exports.watchVideo = function(req,res){
+    res.render('show',{
+        title:"详情",
+        user:req.session.user,
+        success:req.flash('success').toString(),
+        error:req.flash('error').toString()
+    })
+}
