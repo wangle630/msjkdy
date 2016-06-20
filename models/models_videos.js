@@ -11,7 +11,7 @@ var settings = require('../settings.js');
 
 
 //根据id查找视频信息
-exports.findVideoInfo = function (gYOUKUDATA, callback) {
+exports.findVideoInfo = function (videoid, callback) {
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
@@ -22,13 +22,14 @@ exports.findVideoInfo = function (gYOUKUDATA, callback) {
                 return callback(err);
             }
             collection.findOne({
-                id: gYOUKUDATA.id
+                id: videoid
             }, function (err, result) {
                 if (err) {
                     mongodb.close();
                     return callback(err);
                 }
                 callback(null, result);
+
             })
         })
     })
@@ -64,13 +65,11 @@ exports.insertVideoInsert = function (gYOUKUDATA, callback) {
 
 //更新视频信息数据
 exports.updateVideoInfo = function (gYOUKUDATA, callback) {
-
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);//错误，返回err信息
         }
-
         db.collection(settings.col_videos, function (err, collection) {
             if (err) {
                 mongodb.close();
@@ -200,7 +199,6 @@ exports.insertAuthor = function (gAUTHOR, callback) {
 
 //更新视频信息数据
 exports.updateAuthor = function (gAUTHOR, callback) {
-
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {

@@ -1,9 +1,10 @@
 var video = require('../models/models_videos.js');
+var movie = require('../models/models_movies.js');
 
 
 //保存电影API
 exports.saveVideoInfo = function (req, res) {
-    video.findVideoInfo(req.body, function (err, data) {
+    video.findVideoInfo(req.body.id, function (err, data) {
         if (err) {
             res.send('优酷视频查询出错了')
         } else if (data) {
@@ -71,7 +72,6 @@ exports.videos = function (req, res) {
             movies = [];
         }
         if(videos){
-            console.log(total)
             res.render('videos', {
                 title: 'videos',
                 videos: videos,
@@ -117,10 +117,30 @@ exports.videosByAuthor = function (req, res) {
 };
 
 exports.watchVideo = function(req,res){
-    res.render('show',{
-        title:"详情",
-        user:req.session.user,
-        success:req.flash('success').toString(),
-        error:req.flash('error').toString()
+    var videid = req.params.videoid;
+    video.findVideoInfo(videid,function(err,videoResult){
+        if(err){
+            res.send('查找视频出错了')
+        }else if(videoResult){
+            movie.findMovieInfo(videoResult.doubanid,function(err,movieResult){
+                if(err){
+                    res.send('根据doubanid查找电影出错了')
+                } else if(movieResult){
+
+                    res.render('show',{
+                        title:videid,
+                        videoInfo:videoResult,
+                        movieInfo:movieResult,
+                        user:req.session.user,
+                        success:req.flash('success').toString(),
+                        error:req.flash('error').toString()
+                    })
+                }else{
+                    res.send('没有找电影信息')
+                }
+            })
+        } else{
+            res.send('没有找到视频')
+        }
     })
 }

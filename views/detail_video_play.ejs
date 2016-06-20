@@ -9,15 +9,21 @@
 </div>
 
 
+
+
+
+
+
+
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
+    var dst_user_name = '<%= title %>';
     player = new YKU.Player('youkuplayer', {
         styleid: '0',
         client_id: 'ec19ebab48d5902c',
-        vid: 'XMTU4ODMxODQ2NA',
+        vid:  dst_user_name   ,
         newPlayer: true,
         autoplay: false,
         show_related: true
-
     });
 </script>

@@ -3,7 +3,7 @@ var movie = require('../models/models_movies.js');
 
 //保存电影API
 exports.saveMovieInfo = function (req, res) {
-    movie.findMovieInfo(req.body, function (err, data) {
+    movie.findMovieInfo(req.body.douban.id, function (err, data) {
         if (err) {
             console.log(err);
             res.send('电影查询出错了')

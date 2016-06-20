@@ -12,7 +12,7 @@ var settings = require('../settings.js');
 //})
 
 //根据id查找电影信息
-exports.findMovieInfo = function (gMOVIE, callback) {
+exports.findMovieInfo = function (doubanid, callback) {
     mongodb.open(function (err, db) {
         if (err) {
             console.log(err);
@@ -25,7 +25,7 @@ exports.findMovieInfo = function (gMOVIE, callback) {
                 return callback(err);
             }
             collection.findOne({
-                "douban.id": gMOVIE.douban.id
+                "douban.id": doubanid
             }, function (err, result) {
                 if (err) {
                     mongodb.close();

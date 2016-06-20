@@ -695,8 +695,10 @@ body {
 }
 
 .work-post-gal img {
-    weight: 196px;
-    height: 100px;
+    width: 100%;
+
+    /*weight: 196px;*/
+    /*height: 100px;*/
     -webkit-backface-visibility: hidden;
 }
 
@@ -716,7 +718,7 @@ body {
 .hover-box {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 0px;
     width: 100%;
     height: 100%;
     background: rgba(0, 81, 221, 0.18);
@@ -785,13 +787,13 @@ body {
 }
 
 .hover-box a.zoom {
-    right: 34%;
+    right:34%;
     margin-right: 5px;
     background: url('../images/zoom.png') center center no-repeat;
 }
 
 .hover-box a.page {
-    left: 50%;
+    left: 34%;
     margin-left: 5px;
     background: url('../images/page.png') center center no-repeat;
 }
@@ -1477,7 +1479,7 @@ ul.device-list li.device4 {
 .work-post-gal span.derution {
     position: absolute;
     bottom: 0;
-    left: 145px;
+    right: 0;
     display: inline-block;
     color: #0b0b0b;
     padding: 3px 3px;
@@ -1534,7 +1536,7 @@ ul.device-list li.device4 {
     display: inline-block;
     color: #fff;
     padding: 3px 3px;
-    background: #BD7803;
+    background: #CC3333;
     font-size: 4px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 200;
@@ -1547,7 +1549,7 @@ ul.device-list li.device4 {
     display: inline-block;
     color: #fff;
     padding: 3px 3px;
-    background: #712704;
+    background: #990033;
     font-size: 4px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 200;
