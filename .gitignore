@@ -51,4 +51,8 @@ build/Release
 .node_repl_history
 
 # 
+<<<<<<< HEAD
 public/img/ceyescloud
+=======
+public/img/ceyescloud
+>>>>>>> 9a147790b280c77d9ddc4ae8a99033b8a6f170d9
