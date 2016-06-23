@@ -76,26 +76,6 @@ exports.updateMovieInfo = function (gMOVIE, callback) {
             return callback(err);//错误，返回err信息
         }
 
-        var comments_count = gMOVIE.douban ? gMOVIE.douban.comments_count : '';
-        var ratings_count = gMOVIE.douban ? gMOVIE.douban.ratings_count : '';
-        var collect_count = gMOVIE.douban ? gMOVIE.douban.collect_count : '';
-        var reviews_count = gMOVIE.douban ? gMOVIE.douban.reviews_count : '';
-        var wish_count = gMOVIE.douban ? gMOVIE.douban.wish_count : '';
-
-        var Metascore = gMOVIE.imdb ? gMOVIE.imdb.Metascore : '';
-        var imdbRating = gMOVIE.imdb ? gMOVIE.imdb.imdbRating : '';
-        var imdbVotes = gMOVIE.imdb ? gMOVIE.imdb.imdbVotes : '';
-        var tomatoMeter = gMOVIE.imdb ? gMOVIE.imdb.tomatoMeter : '';
-        var tomatoRating = gMOVIE.imdb ? gMOVIE.imdb.tomatoRating : '';
-        var tomatoReviews = gMOVIE.imdb ? gMOVIE.imdb.tomatoReviews : '';
-        var tomatoFresh = gMOVIE.imdb ? gMOVIE.imdb.tomatoFresh : '';
-        var tomatoUserMeter = gMOVIE.imdb ? gMOVIE.imdb.tomatoUserMeter : '';
-        var tomatoUserRating = gMOVIE.imdb ? gMOVIE.imdb.tomatoUserRating : '';
-        var tomatoUserReviews = gMOVIE.imdb ? gMOVIE.imdb.tomatoUserReviews : '';
-        var tomatoURL = gMOVIE.imdb ? gMOVIE.imdb.tomatoURL : '';
-
-        console.log(tomatoURL);
-
         db.collection(settings.col_movies, function (err, collection) {
             if (err) {
                 mongodb.close();
@@ -106,14 +86,8 @@ exports.updateMovieInfo = function (gMOVIE, callback) {
                 {
                     $set: {
                         update: gMOVIE.update,
-                        "douban.rating": gMOVIE.douban.rating,                   //豆瓣评分
-                        "douban.comments_count": comments_count,                 //短评数量
-                        "douban.ratings_count": ratings_count,                   //评分人数
-                        "douban.collect_count": collect_count,                   //看过人数
-                        "douban.reviews_count": reviews_count,                   //影评数量
-                        "douban.wish_count": wish_count,                         //想看人数
+                        douban:gMOVIE.douban,
                         imdb : gMOVIE.imdb
-
                     }
                 },
                 function (err, result) {

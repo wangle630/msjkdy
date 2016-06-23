@@ -7,7 +7,8 @@
             <div class="widget footer-widgets tag-widget">
                 <h4>作者</h4>
                 <ul class="tag-widget-list">
-                    <li><a href="/videos/author/815294744"><img alt="" src="/author/815294744_logo.jpeg" style="width: 32px"> 太阳实况解说</a></li>
+                    <li><a href="/videos"><img alt="" src="/images/authors.png" style="width: 32px"> 所有</a></li>
+                    <li><a class = "btn-warning disabled" href="/videos/author/815294744"><img alt="" src="/author/815294744_logo.jpeg" style="width: 32px"  > 太阳实况解说</a></li>
                     <li><a href="/videos/author/89324314"><img alt="" src="/author/89324314_logo.jpeg" style="width: 32px"> 阿斗归来了</a></li>
                     <li><a href="/videos/author/731571594"><img alt="" src="/author/731571594_logo.jpeg" style="width: 32px"> 谷阿莫</a></li>
                     <li><a href="/videos/author/764201723"><img alt="" src="/author/764201723_logo.jpeg" style="width: 32px"> 大湿兄DSX</a></li>
@@ -17,10 +18,10 @@
                 </ul>
             </div>
 
+
+
             <div class="row">
-
-
-                <% videos.forEach(function (video, index) { %>
+                <% videos.forEach(function (video) { %>
 
                 <div class="work-post web-design brochures col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height: 155px">
                     <div class="work-post-gal">
@@ -42,7 +43,7 @@
 
 
                         <div class="hover-box">
-                            <a class="page" href="videos/watch/<%= video.id %>" target="_blank"></a>
+                            <a class="page" href="/videos/watch/<%= video.id %>" target="_blank"></a>
                         </div>
 
 

@@ -6,10 +6,6 @@ var mongodb = require('./db');
 var settings = require('../settings.js');
 
 
-
-
-
-
 //根据id查找视频信息
 exports.findVideoInfo = function (videoid, callback) {
     mongodb.open(function (err, db) {
@@ -100,11 +96,8 @@ exports.updateVideoInfo = function (gYOUKUDATA, callback) {
 }
 
 
-
-
-
-//一次获取18篇视频   第一个参数是作者
-exports.getEighteenVideos = function(authorID, page, callback) {
+//根据作者获取视频
+exports.getVideosByAuthor = function (authorID, page, num, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -116,21 +109,20 @@ exports.getEighteenVideos = function(authorID, page, callback) {
                 mongodb.close();
                 return callback(err);
             }
-            var query = {videoType:{$ne:"fullfilm"}};
+            var query = {videoType: {$ne: "fullfilm"}};
             if (authorID) {
                 query = {
-                    videoType:{$ne:"fullfilm"},
-                    'user.id':authorID
-                    };
+                    videoType: {$ne: "fullfilm"},
+                    'user.id': authorID
+                };
             }
             //使用 count 返回特定查询的文档数 total
             collection.count(query, function (err, total) {
-                //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
                 collection.find(query, {
-                    skip: (page - 1)*24,
-                    limit: 24
+                    skip: (page - 1) * num,
+                    limit: num
                 }).sort({
-                    update : -1
+                    update: -1
                 }).toArray(function (err, movies) {
                     mongodb.close();
                     if (err) {
@@ -143,6 +135,42 @@ exports.getEighteenVideos = function(authorID, page, callback) {
     });
 };
 
+//根据电影获取视频
+exports.getVideosByMovie = function (movieID, page, num, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        //读取 posts 集合
+        db.collection(settings.col_videos, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+
+            query = {
+                doubanid: movieID
+            };
+
+            //使用 count 返回特定查询的文档数 total
+            collection.count(query, function (err, total) {
+                collection.find(query, {
+                    skip: (page - 1) * num,
+                    limit: num
+                }).sort({
+                    update: -1
+                }).toArray(function (err, movies) {
+                    mongodb.close();
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback(null, movies, total);
+                });
+            });
+        });
+    });
+};
 
 
 //根据id查找作者信息

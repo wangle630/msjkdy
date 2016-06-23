@@ -118,6 +118,22 @@ function getOmdbDetailByName(titles, callback) {
                     if (omdbData.imdbID && omdbData.Title == titles) {
                         gMOVIE.imdb = omdbData;
                         callback(gMOVIE);
+                    } else{
+                        console.log("获取空")
+
+                        gMOVIE.imdb = {};
+
+                        gMOVIE.imdb.Title = "";
+                        gMOVIE.imdb.Rated = "";
+                        gMOVIE.imdb.Genre = "";
+                        gMOVIE.imdb.Director = "";
+                        gMOVIE.imdb.Actors = "";
+                        gMOVIE.imdb.Plot = "";
+                        gMOVIE.imdb.imdbRating = "";
+                        gMOVIE.imdb.imdbID = "";
+                        gMOVIE.imdb.tomatoRating = "";
+                        gMOVIE.imdb.BoxOffice = "";
+                        callback(gMOVIE);
                     }
                 },
                 error: function (data) {
