@@ -179,35 +179,3 @@ exports.watchVideo = function (req, res) {
     })
 }
 
-
-//exports.watchVideo = function(req,res){
-//    var videid = req.params.videoid;
-//    video.findVideoInfo(videid,function(err,videoResult){
-//        if(err){
-//            res.send('查找视频出错了')
-//        }else if(videoResult){
-//            movie.findMovieInfo(videoResult.doubanid,function(err,movieResult){
-//                if(err){
-//                    res.send('根据doubanid查找电影出错了')
-//                } else if(movieResult){
-//                    //查找电影信息
-//                    //查找作者视频
-//                    //查找电影视频
-//                    //电影评论，ajax查找
-//                    res.render('show',{
-//                        title:videid,
-//                        videoInfo:videoResult,
-//                        movieInfo:movieResult,
-//                        user:req.session.user,
-//                        success:req.flash('success').toString(),
-//                        error:req.flash('error').toString()
-//                    })
-//                }else{
-//                    res.send('没有找电影信息')
-//                }
-//            })
-//        } else{
-//            res.send('没有找到视频')
-//        }
-//    })
-//}

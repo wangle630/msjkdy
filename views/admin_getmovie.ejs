@@ -139,7 +139,7 @@
             <div class="col-md-2">
                 <button class="btn btn-success btn-sm" onclick="saveMovieInfo()">保存电影信息</button>
                 <hr/>
-                <button class="btn btn-success btn-sm" onclick="saveMovieInfo()">获取豆瓣评论信息</button>
+                <button class="btn btn-success btn-sm" onclick="getDoubanComments()">获取豆瓣评论信息</button>
                 <hr/>
             </div>
         </div>
@@ -285,6 +285,8 @@
         }
     }
 
+
+    //获取单选按钮的值
     function getRadioValue(radioname){
         var value="";
         var radio=document.getElementsByName(radioname);
@@ -295,6 +297,29 @@
             }
         }
         return value;
+    }
+
+
+    //根据豆瓣ID，获取豆瓣短评论数据
+    function getDoubanComments() {
+        if(gMOVIE.douban.id){
+            $.ajax({
+                type: 'post',
+                url: '/spider',
+                data: {
+                    doubId: gMOVIE.douban.id,
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }else
+        {
+            alert('没有电影数据呢')
+        }
     }
 
 </script>

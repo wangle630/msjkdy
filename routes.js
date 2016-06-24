@@ -2,6 +2,7 @@ var main = require('./handlers/handler_main.js');
 var admin = require('./handlers/handler_admin.js');
 var movie = require('./handlers/handler_movie.js');
 var video = require('./handlers/handler_video.js');
+var spider = require('./handlers/handlers_spider.js');
 
 
 
@@ -44,6 +45,10 @@ module.exports = function(app){
 
     //保存作者API
     app.post('/api/saveauthor',video.saveAuthor);
+
+    //获取豆瓣电影评论
+    app.post('/spider',spider.getDbComments);
+
 
 };
 

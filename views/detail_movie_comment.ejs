@@ -7,65 +7,92 @@
         <div class="tab-content active">
             <ul class="post-popular">
                 <div class="row">
-                     <div class="col-md-6">
+                    <div class="col-md-6">
 
                         <img alt="" src="<%- movieInfo.douban.images.medium %>">
-                         <hr/>
+                        <hr/>
 
-                         <h4><%- movieInfo.douban.title %></h4>
-                         <h6><%- movieInfo.douban.original_title %></h6>
+                        <h4><%- movieInfo.douban.title %></h4>
+                        <h6><%- movieInfo.douban.original_title %></h6>
                     </div>
 
 
                     <ul class="post-popular col-md-6">
-                        <li>
-                            <img alt="" src="/images/douban.png" style="width: 24px">
-                            <h6><a href="#"><%- movieInfo.douban.rating.average %> </a></h6>
-                        </li>
-                        <li>
-                            <img alt="" src="/images/imdb.png" style="width: 24px">
-                            <h6><a href="#"><%- movieInfo.imdb.imdbRating %></a></h6>
-                        </li>
-                        <li>
-                            <img alt="" src="/images/tomato.png" style="width: 24px">
-                            <h6><a href="#"><%- movieInfo.imdb.tomatoRating %></a></h6>
-                        </li>
-                        <li>
-                            <img alt="" src="/images/dollar.png" style="width: 24px">
-                            <h6><a href="#"><%- movieInfo.imdb.BoxOffice %></a></h6>
-                        </li>
-                        <li>
-                            <img alt="" src="/images/rate.png" style="width: 24px">
-                            <h6><a href="#"><%- movieInfo.imdb.Rated %></a></h6>
-                        </li>
+
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <img alt="" src="/images/douban.png" style="width: 24px">
+                            </div>
+
+                            <div class="col-md-offset-1 col-md-8" >
+                                <h6>  <%- movieInfo.douban.rating.average %>/10<br/>
+                                  <%- movieInfo.douban.ratings_count %>人打分</h6>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <h4><img alt="" src="/images/imdb.png" style="width: 24px"> <%- movieInfo.imdb.imdbRating %>
+                                /10</h4>
+
+                            <h6><%- movieInfo.imdb.imdbVotes %>人打分</h6>
+                        </div>
+
+
+                        <div>
+                            <h4><img alt="" src="/images/tomato.png"
+                                     style="width: 24px"> <%- movieInfo.imdb.tomatoRating %>/10</h4>
+
+                            <h6><%- movieInfo.imdb.tomatoReviews %>人打分</h6>
+                        </div>
+
+
+                        <div>
+                            <h5><img alt="" src="/images/dollar.png"
+                                     style="width: 24px"> <%- movieInfo.imdb.BoxOffice %></h5>
+                            <h6>北美票房</h6>
+
+
+                        </div>
+
+
+                        <div>
+                            <h5><img alt="" src="/images/rate.png" style="width: 24px"> <%- movieInfo.imdb.Rated %></h5>
+                            <h6>电影评级</h6>
+                        </div>
+
+
                     </ul>
                 </div>
 
-                    <div class="row">
+                <div class="row">
                     <div class="col-md-12">
                         <p><%- movieInfo.douban.genres %></p>
+
                         <p><%- movieInfo.imdb.Genre %></p>
                         <hr/>
 
                     </div>
-                    </div>
+                </div>
 
 
                 <div class="row">
                     <div class="col-md-12">
 
                         <h6>导演</h6>
+
                         <p><%- movieInfo.douban.directors[0].name %></p>
+
                         <p><%- movieInfo.imdb.Director %></p>
                         <h6>演员</h6>
 
 
                         <p>
-                        <% movieInfo.douban.casts.forEach(function (cast, index) { %>
-                        <%-  cast.name %>
-                        <% }) %>
+                            <% movieInfo.douban.casts.forEach(function (cast, index) { %>
+                            <%- cast.name %>
+                            <% }) %>
                         </p>
-
 
 
                         <p><%- movieInfo.imdb.Actors %></p>
@@ -78,21 +105,22 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h6>简介</h6>
+
                         <p><%- movieInfo.douban.summary %></p>
                     </div>
                 </div>
-
 
 
                 <div class="row">
                     <div class="col-md-12">
                         <hr/>
                         <h6>Plot</h6>
+
                         <p><%- movieInfo.imdb.Plot %></p>
                     </div>
                 </div>
 
-             </ul>
+            </ul>
         </div>
         <div class="tab-content ">
             <ul class="post-recent">
