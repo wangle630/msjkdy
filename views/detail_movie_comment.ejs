@@ -1,13 +1,13 @@
 <div class="tabs-widget widget">
     <ul class="tab-links">
         <li><a class="tab-link1 active" href="#"> 电影信息</a></li>
-        <li><a class="tab-link2 " href="#"> 短评论</a></li>
+        <li><a class="tab-link2 " href="#" onclick="getComments()"> 短评论</a></li>
     </ul>
     <div class="tab-box">
         <div class="tab-content active">
             <ul class="post-popular">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
 
                         <img alt="" src="<%- movieInfo.douban.images.medium %>">
                         <hr/>
@@ -17,49 +17,48 @@
                     </div>
 
 
-                    <ul class="post-popular col-md-6">
+                    <ul class="post-popular col-md-7">
 
-                        <div class="row">
 
-                            <div class="col-md-2">
-                                <img alt="" src="/images/douban.png" style="width: 24px">
-                            </div>
 
-                            <div class="col-md-offset-1 col-md-8" >
-                                <h6>  <%- movieInfo.douban.rating.average %>/10<br/>
-                                  <%- movieInfo.douban.ratings_count %>人打分</h6>
-                            </div>
-                        </div>
+
 
 
                         <div>
-                            <h4><img alt="" src="/images/imdb.png" style="width: 24px"> <%- movieInfo.imdb.imdbRating %>
-                                /10</h4>
-
-                            <h6><%- movieInfo.imdb.imdbVotes %>人打分</h6>
-                        </div>
-
-
-                        <div>
-                            <h4><img alt="" src="/images/tomato.png"
-                                     style="width: 24px"> <%- movieInfo.imdb.tomatoRating %>/10</h4>
-
-                            <h6><%- movieInfo.imdb.tomatoReviews %>人打分</h6>
-                        </div>
-
-
-                        <div>
-                            <h5><img alt="" src="/images/dollar.png"
-                                     style="width: 24px"> <%- movieInfo.imdb.BoxOffice %></h5>
-                            <h6>北美票房</h6>
-
+                            <h6><img alt="" src="/images/douban.png" style="width: 24px"> <%- movieInfo.douban.rating.average %> （<%- movieInfo.douban.ratings_count %>人评分）</h6>
+                            <hr/>
 
                         </div>
 
 
                         <div>
-                            <h5><img alt="" src="/images/rate.png" style="width: 24px"> <%- movieInfo.imdb.Rated %></h5>
-                            <h6>电影评级</h6>
+                            <h6><img alt="" src="/images/imdb.png" style="width: 24px"> <%- movieInfo.imdb.imdbRating %> （<%- movieInfo.imdb.imdbVotes %>人评分）</h6>
+                            <hr/>
+
+                         </div>
+
+
+                        <div>
+                            <h6><img alt="" src="/images/tomato.png"
+                                     style="width: 24px"> <%- movieInfo.imdb.tomatoRating %> （<%- movieInfo.imdb.tomatoReviews %>人评分）</h6>
+                            <hr/>
+
+                         </div>
+
+
+                        <div>
+                            <h6><img alt="" src="/images/dollar.png"
+                                     style="width: 24px"> 北美票房 <%- movieInfo.imdb.BoxOffice %></h6>
+
+                            <hr/>
+
+                        </div>
+
+
+                        <div>
+                            <h6><img alt="" src="/images/rate.png" style="width: 24px"> 电影评级 <%- movieInfo.imdb.Rated %></h6>
+                            <hr/>
+
                         </div>
 
 
@@ -122,93 +121,52 @@
 
             </ul>
         </div>
-        <div class="tab-content ">
-            <ul class="post-recent">
+        <div class="tab-content">
+            <ul class="post-recent" id="movieComments">
                 <li>
-                    <a href="#"><i class="fa  fa-refresh"> 换一批</i></a>
+                    <a href="#" onclick="getComments()"><i class="fa  fa-refresh"> 刷新试试</i></a>
 
                 </li>
                 <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img.png">
-                    <h6><a href="#">Lorem Ipsum. Proin gravida nibh vel velit auctor </a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img2.png">
-                    <h6><a href="#">Sollicitudin, lorem quis bibendum auctor, nisi elit</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <img alt="" src="images/post-img3.png">
-                    <h6><a href="#">Aliquet. Aenean sollicitudin, lorem quis bibendum auctor</a></h6>
-                </li>
-                <li>
-                    <a href="#"><i class="fa  fa-refresh"> 换一批</i></a>
-
+                     <h6><a href="#">没有找到评论</a></h6>
                 </li>
             </ul>
         </div>
     </div>
 </div>
+
+
+
+
+<script>
+    function getComments() {
+        var movieid = '<%- videoInfo.doubanid[0] %>';
+        $.ajax({
+            type: 'get',
+            cache:false,
+            url: '/api/getcomments/' + movieid + '/' + '16',
+            success: function (comments) {
+                if (comments.length > 0) {
+
+                    $('#movieComments').html('<li><a href="#" onclick="getComments()"><i class="fa  fa-refresh"> 换一批</i></a></li>')
+
+                    var tr = '' ;
+
+                    for (var i = 0; i < comments.length; i++) {
+
+                        tr = tr + '<li><h6> ' +  '<img alt="" src="/images/'+comments[i].sourcesite +'.png" style="width: 16px">' +'&nbsp'+ comments[i].avatar +'-'+comments[i].crate +   '</h6><h6> ' +  comments[i].comment +  ' </h6> </li>'
+
+                     }
+
+                    tr = tr + '<li><a href="#" onclick="getComments()"><i class="fa  fa-refresh"> 换一批</i></a></li>'
+                     $('#movieComments').append(tr)
+                    tr.fadeIn(8000)
+
+                }
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    }
+</script>

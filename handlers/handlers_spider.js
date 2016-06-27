@@ -37,7 +37,9 @@ function getDoubanComments(url,originalUrl,doubanID, callback) {
                         avatar: $avatar.attr('title'),      //评论人
                         comment: $comment.text().trim(),    //评论内容
                         crate: ($crate.attr('title') || '一般'),        //级别、打分
-                        cdata: ($cdata.text().trim() || '2016-04-01')          //评论日期
+                        cdata: ($cdata.text().trim() || '2016-04-01'),          //评论日期
+                        randomsort:  Math.round(Math.random()*999999)
+
                     };
                     doubanCommentsList.push(item)
                 });

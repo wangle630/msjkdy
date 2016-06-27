@@ -1569,6 +1569,16 @@ ul.device-list li.device4 {
     opacity: 0.5;
 }
 
+
+.work-post-gal span.author {
+    position: absolute;
+    bottom: -8px;
+    left: -8px;
+     display: inline-block;
+    color: #fff;
+
+}
+
 .product-post-gal span.price {
     position: absolute;
     top: 0;
@@ -1887,10 +1897,10 @@ ul.tab-links li a:hover i {
 }
 
 .page-banner {
-    padding: 22px 0;
+    padding: 11px 0;
     background: url('../upload/banner1.jpg');
     overflow: hidden;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
 }
 
 .page-banner h2 {
@@ -1902,16 +1912,6 @@ ul.tab-links li a:hover i {
     margin-bottom: 0;
 }
 
-ul.page-tree {
-    float: right;
-    border: 1px solid #fff;
-    padding: 10px 15px;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -o-border-radius: 10px;
-}
-
 ul.page-tree li {
     position: relative;
     display: inline-block;
@@ -1921,7 +1921,7 @@ ul.page-tree li {
 ul.page-tree li:before {
     font-family: 'FontAwesome';
     content: '\f0a9';
-    color: #fff;
+    color: #cb1d1d;
     font-size: 14px;
     position: absolute;
     top: 0;
@@ -1938,7 +1938,7 @@ ul.page-tree li:first-child:before {
 
 ul.page-tree li a {
     display: inline-block;
-    color: #fff;
+    color: #c09853;
     font-size: 13px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
@@ -2170,7 +2170,7 @@ ul.pagination-list li a:hover {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     margin: 0;
-    margin-left: 55px;
+    margin-left: 5px;
 }
 
 .tabs-widget .tab-content ul li h6 a {
@@ -2395,7 +2395,7 @@ ul.contact-information-list li i {
 .single-post-content .youku {
     width: 100%;
     height: 500px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .single-post-content h2 {

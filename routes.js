@@ -48,6 +48,8 @@ module.exports = function(app){
 
     //获取豆瓣电影评论
     app.post('/spider',spider.getDbComments);
+    //随机获取评论
+    app.get('/api/getcomments/:movieid/:num',video.getComments);
 
 
 };

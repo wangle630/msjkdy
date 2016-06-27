@@ -95,7 +95,7 @@ exports.videosByAuthor = function (req, res) {
     //查询并返回第 page 页的 24 篇文章
     video.getVideosByAuthor(req.params.author, page,24, function (err, videos, total) {
         if (err) {
-            movies = [];
+            console.log(err);
         }
         if (videos) {
             res.render('videos', {
@@ -123,12 +123,10 @@ exports.watchVideo = function (req, res) {
         if (err) {
             res.send('查找视频出错了')
         } else if (videoResult) {
-
             async.series([
-
                     //返回电影信息results[0]
                     function (callback) {
-                        movie.findMovieInfo(videoResult.doubanid, function (err, movieResult) {
+                        movie.findMovieInfo(videoResult.doubanid[0], function (err, movieResult) {
                             if (err) {
                                 callback(err)
                             } else if (movieResult) {
@@ -139,7 +137,7 @@ exports.watchVideo = function (req, res) {
 
                     //返回电影相关视频results[1]
                     function (callback) {
-                        video.getVideosByMovie(videoResult.doubanid, 1 , 24 , function (err, videoByMovie, total) {
+                        video.getVideosByMovie(videoResult.doubanid[0], 1 , 24 , function (err, videoByMovie, total) {
                             if (err) {
                                 callback(err)
                             }
@@ -179,3 +177,22 @@ exports.watchVideo = function (req, res) {
     })
 }
 
+//获取一定数量的随机评论
+exports.getComments = function (req, res) {
+
+    var movieid = req.params.movieid;
+    var num = parseInt(req.params.num);
+
+
+    video.getCommentsByMovieID(movieid,num, function (err, comments) {
+        if (err) {
+            console.log(err)
+        }
+        if (comments) {
+             res.send(comments)
+        }else{
+            res.send('没有找到电影的评论')
+
+        }
+    });
+};

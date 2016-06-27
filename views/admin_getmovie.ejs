@@ -31,7 +31,7 @@
                         <input type="radio" name="radioVideoType" id="inlineRadio2" value="professional"> 评论
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="radioVideoType" id="inlineRadio3" value="complaint" > 吐槽
+                        <input type="radio" name="radioVideoType" id="inlineRadio3" value="complaint"> 吐槽
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="radioVideoType" id="inlineRadio4" value="minutes" checked> 讲解
@@ -54,17 +54,25 @@
                         <input type="radio" name="radioVideoSpoiler" id="inlineRadio3" value="50" checked> 中
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio4" value="80" > 多
+                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio4" value="80"> 多
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="radioVideoSpoiler" id="inlineRadio5" value="100"> 严重
                     </label>
                 </div>
+
+                <div class="col-md-12">
+                    </br>
+                    <h4 class="text-info col-md-10">豆瓣电影</h4>
+                        <textarea name="name" class="input-sm" placeholder="电影ID数组" id="doubanidlist"
+                                  value="" style="font-size: 18px"></textarea>
+                </div>
+
+
             </div>
 
 
             <div class="col-md-6">
-
                 <div class="col-md-8">
                     <input id="txtMovieName" type="text" name="name" class="input-sm" placeholder="电影名称" value="猎人">
                 </div>
@@ -103,7 +111,9 @@
                 </div>
 
 
-             </div>
+
+
+            </div>
 
         </div>
         <div id="fenciResult" class="col-md-12">
@@ -138,6 +148,8 @@
             </div>
             <div class="col-md-2">
                 <button class="btn btn-success btn-sm" onclick="saveMovieInfo()">保存电影信息</button>
+                <hr/>
+                <button class="btn btn-success btn-sm" onclick="inputVideos()">关联到视频</button>
                 <hr/>
                 <button class="btn btn-success btn-sm" onclick="getDoubanComments()">获取豆瓣评论信息</button>
                 <hr/>
@@ -224,8 +236,16 @@
 
     //保存youku视频信息
     function saveYoukuInfo() {
-        if (gMOVIE.douban) {
-            gYOUKUDATA.doubanid = gMOVIE.douban.id;
+
+        var movielist = $("#doubanidlist").val();
+        var moviearray = []
+        if( movielist.length > 1 ){
+            moviearray = movielist.split(",")
+        }
+
+        if (moviearray.length > 0)
+        {
+            gYOUKUDATA.doubanid = moviearray
             gYOUKUDATA.videoType = getRadioValue('radioVideoType');
             gYOUKUDATA.videoSpoiler = getRadioValue('radioVideoSpoiler');
             gYOUKUDATA.update = $.now();
@@ -266,9 +286,9 @@
                 $('#showYoukuInfo').append('user:' + gYOUKUDATA.user.name + '</br>')
                 $('#showYoukuInfo').append('view_count:' + gYOUKUDATA.view_count + '</br>')
                 $('#showYoukuInfo').append('豆瓣ID:' + gYOUKUDATA.doubanid + '</br></div>')
-                $('#showYoukuInfo').append('作者名称:' +  gYOUKUDATA.user.name + '</br>')
-                $('#showYoukuInfo').append('作者链接:' +  gYOUKUDATA.user.link + '</br>')
-                $('#showYoukuInfo').append('作者ID:' +  gYOUKUDATA.user.id + '</br></h6>')
+                $('#showYoukuInfo').append('作者名称:' + gYOUKUDATA.user.name + '</br>')
+                $('#showYoukuInfo').append('作者链接:' + gYOUKUDATA.user.link + '</br>')
+                $('#showYoukuInfo').append('作者ID:' + gYOUKUDATA.user.id + '</br></h6>')
                 $('#showYoukuInfo').append('</div>')
                 $('#showYoukuInfo').append('</div>')
 
@@ -287,11 +307,11 @@
 
 
     //获取单选按钮的值
-    function getRadioValue(radioname){
-        var value="";
-        var radio=document.getElementsByName(radioname);
-        for(var i=0;i<radio.length;i++){
-            if(radio[i].checked==true){
+    function getRadioValue(radioname) {
+        var value = "";
+        var radio = document.getElementsByName(radioname);
+        for (var i = 0; i < radio.length; i++) {
+            if (radio[i].checked == true) {
                 value = radio[i].value;
                 break;
             }
@@ -300,9 +320,36 @@
     }
 
 
+    //将选中电影信息关联到视频
+    function inputVideos() {
+        if (gMOVIE.douban.id) {
+            var doubanid = gMOVIE.douban.id
+            var movielist = $("#doubanidlist").val();
+            var moviearray = []
+            if( movielist.length > 1 ){
+                moviearray = movielist.split(",")
+            }
+            var ifpush = 0;
+            for(var i =0;i < moviearray.length;i++){
+                if (moviearray[i] == doubanid){
+                    ifpush = 1
+                }
+            }
+            if(ifpush == 0){
+                 moviearray.push(doubanid);
+                $("#doubanidlist").val(moviearray);
+             }
+        } else {
+            alert('没有电影数据呢')
+
+        }
+
+    }
+
+
     //根据豆瓣ID，获取豆瓣短评论数据
     function getDoubanComments() {
-        if(gMOVIE.douban.id){
+        if (gMOVIE.douban.id) {
             $.ajax({
                 type: 'post',
                 url: '/spider',
@@ -316,8 +363,7 @@
                     console.log(err)
                 }
             });
-        }else
-        {
+        } else {
             alert('没有电影数据呢')
         }
     }

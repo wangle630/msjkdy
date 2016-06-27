@@ -80,7 +80,8 @@ exports.updateVideoInfo = function (gYOUKUDATA, callback) {
                         down_count: gYOUKUDATA.down_count,
                         view_count: gYOUKUDATA.view_count,
                         videoType: gYOUKUDATA.videoType,
-                        videoSpoiler: gYOUKUDATA.videoSpoiler
+                        videoSpoiler: gYOUKUDATA.videoSpoiler,
+                        doubanid:gYOUKUDATA.doubanid
                     }
                 },
                 function (err, result) {
@@ -225,7 +226,7 @@ exports.insertAuthor = function (gAUTHOR, callback) {
 }
 
 
-//更新视频信息数据
+//更新作者
 exports.updateAuthor = function (gAUTHOR, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
@@ -261,3 +262,97 @@ exports.updateAuthor = function (gAUTHOR, callback) {
         })
     })
 }
+
+
+//根据作者获取视频
+exports.getVideosByAuthor = function (authorID, page, num, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        //读取 posts 集合
+        db.collection(settings.col_videos, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            var query = {videoType: {$ne: "fullfilm"}};
+            if (authorID) {
+                query = {
+                    videoType: {$ne: "fullfilm"},
+                    'user.id': authorID
+                };
+            }
+            //使用 count 返回特定查询的文档数 total
+            collection.count(query, function (err, total) {
+                collection.find(query, {
+                    skip: (page - 1) * num,
+                    limit: num
+                }).sort({
+                    update: -1
+                }).toArray(function (err, movies) {
+                    mongodb.close();
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback(null, movies, total);
+                });
+            });
+        });
+    });
+};
+
+
+//获取一定数量随机评论的评论
+exports.getCommentsByMovieID = function (movieid,num,callback){
+    mongodb.open(function (err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection(settings.col_commits,function(err,collection){
+            if(err){
+                mongodb.close()
+                return callback(err);
+            }
+
+            var query = { doubanid : movieid };
+
+            var page  = 1;
+
+            collection.count(query,function(err,total){
+
+                if(err){
+                    mongodb.close()
+                    return callback(err);
+                }
+
+                if(total > num){
+                    var skpnum =  Math.round(Math.random()*parseInt(total - num))
+                }else
+                {
+                    var skpnum = 0
+                }
+
+                console.warn(skpnum)
+
+                 collection.find(query,{
+                    skip:skpnum,
+                    limit: num
+                }).sort({
+                    randomsort: -1
+                }).toArray(function(err,comments){
+                    mongodb.close();
+                    if(err){
+                        return callback(err);
+                    }
+                    callback(null,comments)
+                })
+            })
+
+        })
+    })
+
+}
+

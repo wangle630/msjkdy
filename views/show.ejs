@@ -8,13 +8,17 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-md-9 single-post">
-                    <%- include detail_video_play.ejs %>
+                <div class="col-md-8 single-post">
+                    <div class="single-post-content">
+                        <div id="youkuplayer" class="youku"></div>
+                        <h6 style="margin-top: auto">如果视频无法观看，请转至原站：<a href="<%= videoInfo.link %>" target="_blank"> <img src="/images/<%= videoInfo.source %>.png" style="width: 100px;"></a></h6>
+                    </div>
+
                     <%- include detail_videos_bymovie.ejs %>
                     <%- include detail_videos_byauthor.ejs %>
                 </div>
 
-                <div class="col-md-3 sidebar">
+                <div class="col-md-4 sidebar">
                     <div class="sidebar-widgets">
                         <%- include detail_movie_comment.ejs %>
 
@@ -27,5 +31,18 @@
 
 </div>
 <!-- End content -->
+
+<script type="text/javascript" src="http://player.youku.com/jsapi"></script>
+<script type="text/javascript">
+    var dst_user_name = '<%= title %>';
+    player = new YKU.Player('youkuplayer', {
+        styleid: '0',
+        client_id: 'ec19ebab48d5902c',
+        vid:  dst_user_name   ,
+        newPlayer: true,
+        autoplay: false,
+        show_related: true
+    });
+</script>
 
 <%- include footer.ejs %>
