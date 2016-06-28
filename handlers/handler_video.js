@@ -3,12 +3,12 @@ var movie = require('../models/models_movies.js');
 
 
 //保存电影API
-exports.saveVideoInfo = function (req, res) {
-    video.findVideoInfo(req.body.id, function (err, data) {
+exports.saveVideo = function (req, res) {
+    video.findVideo(req.body.id, function (err, data) {
         if (err) {
             res.send('优酷视频查询出错了')
         } else if (data) {
-            video.updateVideoInfo(req.body, function (err, row) {
+            video.updateVideo(req.body, function (err, row) {
                 if (err) {
                     console.log(err)
                     res.send('优酷视频更新出错了')
@@ -19,13 +19,44 @@ exports.saveVideoInfo = function (req, res) {
                 }
             })
         } else {
-            video.insertVideoInsert(req.body, function (err, row) {
+            video.insertVideo(req.body, function (err, row) {
                 if (err) {
                     res.send('视频保存出错了')
                 } else if (row) {
                     res.send('优酷视频保存成功:' + row.insertedIds)
                 } else {
                     res.send('没有取得保存优酷视频结果？')
+                }
+            })
+        }
+    })
+};
+
+
+//保存完整影片
+exports.saveFilm = function (req, res) {
+    video.findFilm(req.body.id, function (err, data) {
+        if (err) {
+            res.send('完整影片查询出错了')
+        } else if (data) {
+            video.updateFilm(req.body, function (err, row) {
+                if (err) {
+                    console.log(err)
+                    res.send('完整影片更新出错了')
+                } else if (row) {
+                    res.send('完整影片更新成功:' + row)
+                } else {
+                    res.send('没有取得更新完整影片结果？')
+                }
+            })
+        } else {
+            video.insertFilm(req.body, function (err, row) {
+                if (err) {
+                    res.send('完整影片保存出错了')
+                } else if (row) {
+                    res.send('完整影片保存成功:' + row.insertedIds)
+                } else {
+                    res.send('没有取得保存完整影片结果？')
                 }
             })
         }
@@ -74,6 +105,7 @@ exports.videos = function (req, res) {
         if (videos) {
             res.render('videos', {
                 title: 'videos',
+                header:'showVideoList',
                 videos: videos,
                 total: total,
                 totalPage: Math.ceil(total / 24),
@@ -100,6 +132,7 @@ exports.videosByAuthor = function (req, res) {
         if (videos) {
             res.render('videos', {
                 title: '/videos/author/' + req.params.author,
+                header:'showVideoList',
                 videos: videos,
                 total: total,
                 totalPage: Math.ceil(total / 24),
@@ -119,7 +152,7 @@ var async = require("async");
 
 exports.watchVideo = function (req, res) {
     var videid = req.params.videoid;
-    video.findVideoInfo(videid, function (err, videoResult) {
+    video.findVideo(videid, function (err, videoResult) {
         if (err) {
             res.send('查找视频出错了')
         } else if (videoResult) {
@@ -159,6 +192,7 @@ exports.watchVideo = function (req, res) {
                 function (err, results) {
                     res.render('show', {
                         title: videid,
+                        header:'',
                         videoInfo: videoResult,
                         movieInfo: results[0],
                         videoByMovie:results[1],
@@ -177,22 +211,3 @@ exports.watchVideo = function (req, res) {
     })
 }
 
-//获取一定数量的随机评论
-exports.getComments = function (req, res) {
-
-    var movieid = req.params.movieid;
-    var num = parseInt(req.params.num);
-
-
-    video.getCommentsByMovieID(movieid,num, function (err, comments) {
-        if (err) {
-            console.log(err)
-        }
-        if (comments) {
-             res.send(comments)
-        }else{
-            res.send('没有找到电影的评论')
-
-        }
-    });
-};

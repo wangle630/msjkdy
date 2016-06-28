@@ -2,6 +2,7 @@
 exports.homepage = function(req,res){
     res.render('index',{
         title:"首页",
+        header:"首页",
         user:req.session.user,
         success:req.flash('success').toString(),
         error:req.flash('error').toString()

@@ -11,7 +11,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
-var doubanComments = require('../models/models_movies.js');
+var comments = require('../models/models_comments.js');
 
 
 
@@ -92,7 +92,7 @@ exports.getDbComments = function (req, res,doubanID) {
 
 function doubanCommit_save (doubanCommentsList ,callback) {
     var doubanCommits = doubanCommentsList;
-    doubanComments.findDoubanCommits(doubanCommits[0].doubanid, function (result) {
+    comments.findDoubanCommits(doubanCommits[0].doubanid, function (result) {
         l1 = doubanCommits.length
         l2 = result.length
         var n = 0;
@@ -105,7 +105,7 @@ function doubanCommit_save (doubanCommentsList ,callback) {
         }
 
         if (doubanCommits.length > 0) {
-            doubanComments.insertDoubanCommit(doubanCommits, function (err, row) {
+            comments.insertDoubanCommit(doubanCommits, function (err, row) {
                 if (err) return callback(err)
                 callback(null,row)
             })
@@ -113,4 +113,24 @@ function doubanCommit_save (doubanCommentsList ,callback) {
             callback(null,'0')
         }
     })
+};
+
+//获取一定数量的随机评论
+exports.getComments = function (req, res) {
+
+    var movieid = req.params.movieid;
+    var num = parseInt(req.params.num);
+
+
+    comments.getCommentsByMovieID(movieid,num, function (err, comments) {
+        if (err) {
+            console.log(err)
+        }
+        if (comments) {
+            res.send(comments)
+        }else{
+            res.send('没有找到电影的评论')
+
+        }
+    });
 };

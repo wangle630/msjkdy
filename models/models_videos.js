@@ -7,7 +7,7 @@ var settings = require('../settings.js');
 
 
 //根据id查找视频信息
-exports.findVideoInfo = function (videoid, callback) {
+exports.findVideo = function (videoid, callback) {
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
@@ -32,8 +32,34 @@ exports.findVideoInfo = function (videoid, callback) {
 }
 
 
+//根据id查找完整影片
+exports.findFilm = function (videoid, callback) {
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        db.collection(settings.col_films, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            collection.findOne({
+                id: videoid
+            }, function (err, result) {
+                if (err) {
+                    mongodb.close();
+                    return callback(err);
+                }
+                callback(null, result);
+
+            })
+        })
+    })
+}
+
+
 //插入视频详细数据
-exports.insertVideoInsert = function (gYOUKUDATA, callback) {
+exports.insertVideo = function (gYOUKUDATA, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -59,8 +85,35 @@ exports.insertVideoInsert = function (gYOUKUDATA, callback) {
 }
 
 
+//插入完整影片数据
+exports.insertFilm = function (gYOUKUDATA, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+        db.collection(settings.col_films, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.insert(gYOUKUDATA, {
+                safe: true
+            }, function (err, result) {
+                if (err) {
+                    mongodb.close();
+                    return callback(err);
+                }
+                callback(null, result);//成功！err为null，并返回存储后的用户文档
+
+            })
+        })
+    })
+}
+
+
 //更新视频信息数据
-exports.updateVideoInfo = function (gYOUKUDATA, callback) {
+exports.updateVideo = function (gYOUKUDATA, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -82,6 +135,39 @@ exports.updateVideoInfo = function (gYOUKUDATA, callback) {
                         videoType: gYOUKUDATA.videoType,
                         videoSpoiler: gYOUKUDATA.videoSpoiler,
                         doubanid:gYOUKUDATA.doubanid
+                    }
+                },
+                function (err, result) {
+                    if (err) {
+                        mongodb.close();
+                        return callback(err);
+                    }
+                    callback(null, result);//成功！err为null，并返回存储后的用户文档
+
+                })
+        })
+    })
+}
+
+
+//更新完整影片
+exports.updateFilm = function (gYOUKUDATA, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+        db.collection(settings.col_videos, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.updateMany(
+                {id: gYOUKUDATA.id},
+                {
+                    $set: {
+                        update: gYOUKUDATA.update,
+                         doubanid:gYOUKUDATA.doubanid
                     }
                 },
                 function (err, result) {
@@ -302,57 +388,4 @@ exports.getVideosByAuthor = function (authorID, page, num, callback) {
         });
     });
 };
-
-
-//获取一定数量随机评论的评论
-exports.getCommentsByMovieID = function (movieid,num,callback){
-    mongodb.open(function (err,db){
-        if(err){
-            return callback(err);
-        }
-
-        db.collection(settings.col_commits,function(err,collection){
-            if(err){
-                mongodb.close()
-                return callback(err);
-            }
-
-            var query = { doubanid : movieid };
-
-            var page  = 1;
-
-            collection.count(query,function(err,total){
-
-                if(err){
-                    mongodb.close()
-                    return callback(err);
-                }
-
-                if(total > num){
-                    var skpnum =  Math.round(Math.random()*parseInt(total - num))
-                }else
-                {
-                    var skpnum = 0
-                }
-
-                console.warn(skpnum)
-
-                 collection.find(query,{
-                    skip:skpnum,
-                    limit: num
-                }).sort({
-                    randomsort: -1
-                }).toArray(function(err,comments){
-                    mongodb.close();
-                    if(err){
-                        return callback(err);
-                    }
-                    callback(null,comments)
-                })
-            })
-
-        })
-    })
-
-}
 

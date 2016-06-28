@@ -24,49 +24,6 @@
                 <div id="showYoukuInfo" class="col-md-12">
                 </div>
 
-                <div class="col-md-12">
-                    </br>
-                    <label>视频类型:</label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoType" id="inlineRadio1" value="fullfilm"> 完整电影
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoType" id="inlineRadio2" value="professional"> 评论
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoType" id="inlineRadio3" value="complaint"> 吐槽
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoType" id="inlineRadio4" value="minutes" checked> 讲解
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoType" id="inlineRadio5" value="lace"> 花边
-                    </label>
-                </div>
-
-                <div class="col-md-12">
-                    </br>
-                    <label>剧透级别:</label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio1" value="0"> 无
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio2" value="30"> 少
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio3" value="50" checked> 中
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio4" value="80"> 多
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radioVideoSpoiler" id="inlineRadio5" value="100"> 严重
-                    </label>
-                </div>
-
-
-
-
             </div>
 
 
@@ -113,11 +70,9 @@
         if (moviearray.length > 0)
         {
             gYOUKUDATA.doubanid = moviearray
-            gYOUKUDATA.videoType = getRadioValue('radioVideoType');
-            gYOUKUDATA.videoSpoiler = getRadioValue('radioVideoSpoiler');
-            gYOUKUDATA.update = $.now();
+              gYOUKUDATA.update = $.now();
             gYOUKUDATA.source = 'youku';
-            $.post('/api/saveyoukuvideo', gYOUKUDATA, function (data) {
+            $.post('/api/savefilm', gYOUKUDATA, function (data) {
                 alert(data);
             });
         } else {
@@ -195,9 +150,9 @@
                 }
             }
             if(ifpush == 0){
-                 moviearray.push(doubanid);
+                moviearray.push(doubanid);
                 $("#doubanidlist").val(moviearray);
-             }
+            }
         } else {
             alert('没有电影数据呢')
 

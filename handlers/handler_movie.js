@@ -44,6 +44,7 @@ exports.movies = function (req, res) {
         console.log(total)
         res.render('movies', {
             title: 'movies',
+            header:'showMovieList',
             movies: movies,
             total: total,
             totalPage: Math.ceil(total/18),
@@ -55,4 +56,36 @@ exports.movies = function (req, res) {
             error: req.flash('error').toString()
         });
     });
+};
+
+
+//保存电影API
+exports.saveMovieInfo = function (req, res) {
+    movie.findMovieInfo(req.body.douban.id, function (err, data) {
+        if (err) {
+            console.log(err);
+            res.send('电影查询出错了')
+        } else if (data) {
+            movie.updateMovieInfo(req.body, function (err, row) {
+                if (err) {
+                    console.log(err)
+                    res.send('电影更新出错了')
+                } else if (row) {
+                    res.send('电影更新成功:' + row)
+                } else {
+                    res.send('没有取得更新电影结果？')
+                }
+            })
+        } else {
+            movie.insertMovieInsert(req.body, function (err, row) {
+                if (err) {
+                    res.send('电影保存出错了')
+                } else if (row) {
+                    res.send('电影保存成功:' + row.insertedIds)
+                } else {
+                    res.send('没有取得保存电影结果？')
+                }
+            })
+        }
+    })
 };

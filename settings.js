@@ -7,5 +7,7 @@ module.exports ={
     col_movies : 'movies',
     col_videos : 'videos',
     col_authors : 'authors',
-    col_commits : 'commits',
+    col_comments : 'comments',
+    col_classics : 'classics',
+    col_films : 'films'
 }

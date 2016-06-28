@@ -196,7 +196,7 @@ function showImdbMovieInfo(monvieinfo) {
         $('#showImdbInfo').append('imdb名称:' + monvieinfo.imdb.Title + '</br>')
         $('#showImdbInfo').append('imdb评分:' + monvieinfo.imdb.imdbRating + '</br>')
         $('#showImdbInfo').append('imdb评级:' + monvieinfo.imdb.Rated + '</br>')
-        $('#showImdbInfo').append('tomatoURL:' + monvieinfo.imdb.tomatoURL + '</br>')
+        $('#showImdbInfo').append('tomatoURL:' +'<a href="'+ monvieinfo.imdb.tomatoURL +'" target="_blank">' + 'tomatoURL' + '</a></br>')
         $('#showImdbInfo').append('tomatoRating:' + monvieinfo.imdb.tomatoRating + '</br>')
         $('#showImdbInfo').append('tomatoUserRating:' + monvieinfo.imdb.tomatoUserRating + '</br>')
         $('#showImdbInfo').append('票房:' + monvieinfo.imdb.BoxOffice + '</br>')

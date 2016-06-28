@@ -1,0 +1,204 @@
+<%- include admin_header.ejs %>
+<script type="text/javascript" src="/js/admin.js"></script>
+
+
+<div class="container">
+    <div class="comment-form form-horizontal">
+        <hr/>
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="col-md-12">
+                    <label class="text-info">英文名</label>
+                    <input type="text" name="name" class="input-sm" placeholder="英文名" id="txtClassicEName"
+                           value="" onkeyup=changeInputID(this)>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="text-info">中文名</label>
+                    <input type="text" name="name" class="input-sm" placeholder="中文名" id="txtClassicCName"
+                           value="">
+                </div>
+
+                <div class="col-md-12">
+
+                    <label class="text-info">logo图片</label>
+                    <input type="text" name="name" class="input-sm" placeholder="logo图片" id="txtClassicLogo" value="">
+                </div>
+
+                <div class="col-md-12">
+
+                    <label class="text-info">portfolio图片</label>
+                    <input type="text" name="name" class="input-sm" placeholder="logo图片" id="txtClassicPortfolio" value="">
+                </div>
+
+
+                <div class="col-md-12">
+
+                    <label class="text-info">banner图片</label>
+                    <input type="text" name="name" class="input-sm" placeholder="banner图片" id="txtClassicBanner" value="">
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-success btn-sm" onclick="inputVideos()">关联到电影</button>
+                    <button class="btn btn-info btn-sm" onclick="saveClassic()">保存集合信息</button>
+                </div>
+                <hr/>
+                <div class="col-md-12">
+                    <button class="btn btn-block btn-warning btn-sm" onclick="getClassicByEName()">获取集合</button>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="col-md-12">
+                    </br>
+                    <label class="text-info col-md-10">短描述</label>
+                        <textarea name="name" class="input-sm" placeholder="短描述" id="txtShortDescription"
+                                  value="" style="font-size: 12px"></textarea>
+                </div>
+
+                <div class="col-md-12">
+                    </br>
+                    <label class="text-info col-md-10">长描述</label>
+                        <textarea name="name" class="input-sm" placeholder="长描述" id="txtLongDescription"
+                                  value="" style="font-size: 12px"></textarea>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="col-md-12">
+                    </br>
+                    <label class="text-info col-md-10">标签</label>
+                        <textarea name="name" class="input-sm" placeholder="标签" id="tags"
+                                  value="" style="font-size: 18px"></textarea>
+                </div>
+
+
+                <div class="col-md-12">
+                    </br>
+                    <label class="text-info col-md-10">关联电影</label>
+                        <textarea name="name" class="input-sm" placeholder="关联电影" id="doubanidlist"
+                                  value="" style="font-size: 18px"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <%- include admin_doubanMovie.ejs %>
+
+    </div>
+</div>
+
+
+<script>
+
+    function changeInputID(obj){
+        $('#txtClassicLogo').val('/classic/' + obj.value + '_logo.jpeg')
+        $('#txtClassicPortfolio').val('/classic/' + obj.value + '_portfolio.jpeg')
+        $('#txtClassicBanner').val('/classic/' +obj.value +   '_banner.jpeg')
+    }
+
+    //保存作者信息视频信息
+    function saveClassic() {
+        var gCLASSIC = {}
+
+        if($('#txtClassicEName').val()==''){
+            alert('英文名称不能为空');
+            return false;
+        }
+        if($('#txtClassicCName').val()==''){
+            alert('中文名称不能为空');
+            return false;
+        }
+        var movielist = $("#doubanidlist").val();
+        var moviearray = []
+        if( movielist.length > 0 ){
+            moviearray = movielist.split(",")
+        }else{
+            alert('关联电影不能为空');
+            return false;
+        }
+        var taglist = $("#tags").val();
+        var tagarray = taglist.split(",")
+
+
+        gCLASSIC.eName = $('#txtClassicEName').val()
+        gCLASSIC.cName = $('#txtClassicCName').val()
+        gCLASSIC.logo = $('#txtClassicLogo').val()
+        gCLASSIC.portfolio = $('#txtClassicPortfolio').val()
+        gCLASSIC.banner = $('#txtClassicBanner').val()
+        gCLASSIC.shortDescription = $('#txtShortDescription').val()
+        gCLASSIC.longDescription = $('#txtLongDescription').val()
+        gCLASSIC.tags = tagarray
+        gCLASSIC.doubanid = moviearray
+        gCLASSIC.update = $.now();
+
+        $.post('/api/saveclassic', gCLASSIC, function (data) {
+            alert(data);
+        });
+    }
+
+
+    //将选中电影信息关联到视频
+    function inputVideos() {
+        if (gMOVIE.douban.id) {
+            var doubanid = gMOVIE.douban.id
+            var movielist = $("#doubanidlist").val();
+            var moviearray = []
+            if( movielist.length > 1 ){
+                moviearray = movielist.split(",")
+            }
+            var ifpush = 0;
+            for(var i =0;i < moviearray.length;i++){
+                if (moviearray[i] == doubanid){
+                    ifpush = 1
+                }
+            }
+            if(ifpush == 0){
+                moviearray.push(doubanid);
+                $("#doubanidlist").val(moviearray);
+            }
+        } else {
+            alert('没有电影数据呢')
+
+        }
+    }
+
+    function getClassicByEName(){
+        var eName = $('#txtClassicEName').val()
+
+        if($('#txtClassicEName').val()==''){
+            alert('英文名称不能为空');
+            return false;
+        }
+
+        $.ajax({
+            type: 'get',
+            cache:false,
+            url: '/api/getclassic?'  + 'eName=' + eName,
+            success: function (classic) {
+                $('#txtClassicEName').val(classic.eName)
+                $('#txtClassicCName').val(classic.cName)
+                $('#txtClassicLogo').val(classic.logo)
+                $('#txtClassicPortfolio').val(classic.portfolio)
+                $('#txtClassicBanner').val(classic.banner)
+                $('#txtShortDescription').val(classic.shortDescription)
+                $('#txtLongDescription').val(classic.longDescription)
+                $("#tags").val(classic.tags);
+                $("#doubanidlist").val(classic.doubanid);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+
+    }
+
+
+</script>
+
+<%- include footer.ejs %>

@@ -1,0 +1,169 @@
+<div class="container">
+    <hr/>
+    <div class="col-md-3">
+        <input id="txtMovieName" type="text" name="name" class="input-sm" placeholder="电影名称" value="猎人">
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-default" onclick="getFenciByManual()">
+            分词
+        </button>
+        <button class="btn btn-default" onclick="getDoubanListByManual()">
+            豆瓣列表
+        </button>
+    </div>
+
+    <!--获取imdb电影名称-->
+    <div class="col-md-2">
+        <input id="txtImdbName" type="text" name="name" class="input-sm"
+               value="imdb Name">
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-default" onclick="getImdbByName()">
+            imdb by name
+        </button>
+    </div>
+
+    <!--获取imdb电影名称-->
+    <div class="col-md-2">
+        <input id="txtImdbID" type="text" name="name" class="input-sm"
+               value="imdb ID">
+    </div>
+
+    <div class="col-md-1">
+        <button class="btn btn-default" onclick="getImdbByID()">
+            imdb by ID
+        </button>
+    </div>
+</div>
+
+
+<div id="fenciResult" class="col-md-12">
+</div>
+
+<!--显示分词结果-->
+
+
+<!--显示电影列表-->
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="panel panel-default" style="height: auto;">
+            <div class="panel-heading">豆瓣筛选</div>
+
+        </div>
+    </div>
+</div>
+
+<!--显示豆瓣电影信息-->
+<div class="row">
+    <div class="col-md-6">
+        <div id="dblist">
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div id="showDoubanInfo">
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div id="showImdbInfo">
+        </div>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-success btn-sm" onclick="saveMovieInfo()">保存电影信息</button>
+        <hr/>
+        <button class="btn btn-success btn-sm" onclick="getDoubanComments()">获取豆瓣评论信息</button>
+        <hr/>
+    </div>
+</div>
+
+
+<script>
+
+    //合并后的电影信息
+    var gMOVIE = {}
+
+
+    //分词无结果，手动输入电影名称
+    function getFenciByManual() {
+        $('#fenciResult').html('');
+        fileFenciByBaidu($('#txtMovieName').val())
+        fielFenciByDot($('#txtMovieName').val())
+    }
+
+    //手动取得豆瓣列表
+    function getDoubanListByManual() {
+        getDouBanMovieList($('#txtMovieName').val())
+    }
+
+    //通过名称取得imdb电影信息
+    function getImdbByName() {
+        var title = $("#txtImdbName").val();
+        $('#showImdbInfo').html('');
+
+        getOmdbDetailByName(title, function (movieinfo) {
+            showImdbMovieInfo(movieinfo);
+        })
+    }
+
+
+    //通过id取得imdb电影信息
+    function getImdbByID() {
+        var title = $("#txtImdbID").val();
+        $('#showImdbInfo').html('');
+
+        getOmdbDetailByID(title, function (movieinfo) {
+            showImdbMovieInfo(movieinfo);
+        })
+    }
+
+
+    //点击图片获取某个电影，存入全局变量，并显示出来
+    function showMachMovie(doubanID) {
+
+        $('#showDoubanInfo').html('');
+        $('#showImdbInfo').html('');
+
+        gMOVIE = {};
+
+        getDoubanDetail(doubanID, function (movieinfo_douban) {
+            showDoubanMovieInfo(movieinfo_douban);
+            getOmdbDetailByName(movieinfo_douban.douban.original_title, function (movieinfo) {
+                showImdbMovieInfo(movieinfo);
+            })
+        })
+    }
+
+    //保存电影信息
+    function saveMovieInfo() {
+        if (gMOVIE.douban) {
+            $.post('/api/savemovieinfo', gMOVIE, function (data) {
+                alert(data);
+            });
+        } else {
+            alert('没有数据！(gMOVIE.id)')
+        }
+    }
+
+    //根据豆瓣ID，获取豆瓣短评论数据
+    function getDoubanComments() {
+        if (gMOVIE.douban.id) {
+            $.ajax({
+                type: 'post',
+                url: '/getcomments',
+                data: {
+                    doubId: gMOVIE.douban.id,
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        } else {
+            alert('没有电影数据呢')
+        }
+    }
+
+</script>
