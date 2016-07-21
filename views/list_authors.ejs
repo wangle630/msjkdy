@@ -1,0 +1,51 @@
+<!-- content
+			================================================== -->
+<div  class="openheader col-md-2 col-sm-2 col-xs-2 col-ld-2" id="openheader"  >
+    <a style="margin-right: 50px;" onclick="headerOpenCollect()">展开 所有作者 <i class="fa   fa-toggle-up"></i></a>
+</div>
+
+<div  style="display: none"  id="collectheader" class="openheader col-md-2 col-sm-2 col-xs-2 col-ld-2"  >
+    <a style="margin-right: 50px;" onclick="headerOpenCollect()">收起 所有作者 <i class="fa   fa-toggle-down"></i></a>
+</div>
+
+     <div   class="tags-widget widget col-md-10 col-sm-10 col-xs-10 col-ld-10" >
+
+        <ul class="tag-widget-list" id="showheader">
+
+            <li ><a href="/videos/"><img alt="" src="/images/authors.png">所有</a></li>
+
+            <% authors.forEach(function (author) { %>
+            <% if (author.authorID == gg ) { %>
+            <li><a href="#"   class="selected"><img  alt="" class="img-rounded" src="<%= author.authorLogo%>"  ><%= author.authorName %></a></li>
+            <% } %>
+
+            <% }) %>
+
+
+            <% authors.forEach(function (author) { %>
+            <% if (author.authorID != gg ) { %>
+            <li><a href="/videos/<%= author.authorID %>"><img alt="" class="img-rounded" src="<%= author.authorLogo%>" ><%= author.authorName %></a></li>
+            <% } %>
+            <% }) %>
+        </ul>
+        <hr/>
+    </div>
+
+
+ <!-- End content -->
+
+<script>
+
+    function headerOpenCollect() {
+
+
+        if( $("#showheader").css("height") == "35px"){
+            $("#showheader").css("height","auto");
+        }else{
+            $("#showheader").css("height","35px");
+        }
+
+        $("#openheader").toggle();
+        $("#collectheader").toggle();
+    }
+</script>

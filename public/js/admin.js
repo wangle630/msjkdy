@@ -97,7 +97,7 @@ function getDoubanDetail(alt, callback) {
         gMOVIE.douban = data;
         callback(gMOVIE);
     }).fail(function (err) {
-        alert('查找失败！' + err)
+        callback(err);
     });
 }
 
@@ -120,9 +120,7 @@ function getOmdbDetailByName(titles, callback) {
                         callback(gMOVIE);
                     } else{
                         console.log("获取空")
-
                         gMOVIE.imdb = {};
-
                         gMOVIE.imdb.Title = "";
                         gMOVIE.imdb.Rated = "";
                         gMOVIE.imdb.Genre = "";
@@ -201,7 +199,7 @@ function showImdbMovieInfo(monvieinfo) {
         $('#showImdbInfo').append('tomatoUserRating:' + monvieinfo.imdb.tomatoUserRating + '</br>')
         $('#showImdbInfo').append('票房:' + monvieinfo.imdb.BoxOffice + '</br>')
         $('#showImdbInfo').append('发行:' + monvieinfo.imdb.Production + '</br>')
-        $('#showImdbInfo').append('<a href = "' + monvieinfo.imdb.Poster + '">图片</a>')
+        $('#showImdbInfo').append('<a href = "' + monvieinfo.imdb.Poster + '" target="_blank">图片</a>')
 
 
     }

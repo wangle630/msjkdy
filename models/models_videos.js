@@ -134,7 +134,8 @@ exports.updateVideo = function (gYOUKUDATA, callback) {
                         view_count: gYOUKUDATA.view_count,
                         videoType: gYOUKUDATA.videoType,
                         videoSpoiler: gYOUKUDATA.videoSpoiler,
-                        doubanid:gYOUKUDATA.doubanid
+                        doubanid:gYOUKUDATA.doubanid,
+                        doubanidtitle:gYOUKUDATA.doubanidtitle
                     }
                 },
                 function (err, result) {
@@ -209,7 +210,7 @@ exports.getVideosByAuthor = function (authorID, page, num, callback) {
                     skip: (page - 1) * num,
                     limit: num
                 }).sort({
-                    update: -1
+                    publisheddate: 1
                 }).toArray(function (err, movies) {
                     mongodb.close();
                     if (err) {
@@ -246,7 +247,7 @@ exports.getVideosByMovie = function (movieID, page, num, callback) {
                     skip: (page - 1) * num,
                     limit: num
                 }).sort({
-                    update: -1
+                    publisheddate: -1
                 }).toArray(function (err, movies) {
                     mongodb.close();
                     if (err) {
@@ -357,35 +358,61 @@ exports.getVideosByAuthor = function (authorID, page, num, callback) {
         if (err) {
             return callback(err);
         }
-        //读取 posts 集合
         db.collection(settings.col_videos, function (err, collection) {
             if (err) {
                 mongodb.close();
                 return callback(err);
             }
-            var query = {videoType: {$ne: "fullfilm"}};
+            var query = {};
             if (authorID) {
-                query = {
-                    videoType: {$ne: "fullfilm"},
-                    'user.id': authorID
-                };
+                query = {'user.id': authorID};
             }
-            //使用 count 返回特定查询的文档数 total
             collection.count(query, function (err, total) {
                 collection.find(query, {
                     skip: (page - 1) * num,
                     limit: num
                 }).sort({
-                    update: -1
-                }).toArray(function (err, movies) {
+                    published: -1
+                }).toArray(function (err, videos) {
                     mongodb.close();
                     if (err) {
                         return callback(err);
                     }
-                    callback(null, movies, total);
+                    callback(null, videos, total);
                 });
             });
         });
     });
 };
+
+
+//获取headers  并用distinct去重
+exports.getAuthors = function(callback){
+    mongodb.open(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection(settings.col_authors,function(err,collection){
+            if(err){
+                mongodb.close();
+                return callback(err)
+            }
+            var query = {};
+
+            collection.find(query).toArray(function(err,authors){
+                 mongodb.close();
+                if(err){
+                    return callback(err)
+                }
+                callback(null,authors)
+            })
+
+        })
+    })
+}
+
+
+
+
 

@@ -9,6 +9,16 @@ exports.homepage = function(req,res){
     })
 }
 
+exports.test = function(req,res){
+    res.render('test',{
+        title:"首页",
+        header:"首页",
+        user:req.session.user,
+        success:req.flash('success').toString(),
+        error:req.flash('error').toString()
+    })
+}
+
 exports.show = function(req,res){
     res.render('show',{
         title:"详情",

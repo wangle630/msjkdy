@@ -5,25 +5,25 @@
     <!-- Wrapper for slides -->
 
     <div class="item active">
-        <div class="row">
+        <div class="row" id = "movieByVideo">
             <% videoByMovie.forEach(function (video) { %>
 
-            <div class="work-post web-design brochures col-md-3 col-sm-4 col-xs-6" style="height: 155px">
+            <div class="work-post web-design brochures col-md-3 col-sm-4 col-xs-6" style="height: 155px" >
                 <div class="work-post-gal">
-                    <img alt="" src="<%= video.thumbnail ? video.thumbnail : video.thumbnail_v2 %>">
+                    <img alt="" class="videoimg" src="<%= video.thumbnail ? video.thumbnail : video.thumbnail_v2 %>">
                     <span class="jutou<%= video.videoSpoiler %>">剧透</span>
 
 
                     <% if( video.videoType == 'professional') { %>
-                    <span class="lanpian">专业</span>
+                    <span class="videotype">专业</span>
                     <% } %>
 
                     <% if( video.videoType == 'complaint') { %>
-                    <span class="lanpian">吐槽</span>
+                    <span class="videotype">吐槽</span>
                     <% } %>
 
                     <% if( video.videoType == 'minutes') { %>
-                    <span class="lanpian">讲解</span>
+                    <span class="videotype">讲解</span>
                     <% } %>
 
 
@@ -34,7 +34,7 @@
                     <span class="author"><img alt="" class="img-circle" src="/author/<%= video.user.id%>_logo.jpeg" style="width: 32px"></span>
 
 
-                    <span class="derution"><%= video.duration %></span>
+                    <span class="derution"><%= parseInt(video.duration / 60 % 60) + ':'+ (video.duration % 60) %></span>
                 </div>
                 <div>
                     <h6><%= video.title %></h6>

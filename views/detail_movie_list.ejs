@@ -1,0 +1,324 @@
+
+<% if(videoInfo.doubanidtitle.length > 0) { %>
+     <div class="tags-widget widget">
+
+         <h6>包含电影</h6>
+        <ul class="tag-widget-list">
+            <% videoInfo.doubanidtitle.forEach(function (doubanidtitle) { %>
+            <% var doubanid = doubanidtitle.substring(0,doubanidtitle.indexOf("--")) %>
+            <% var doubantitle = doubanidtitle.substring(doubanidtitle.indexOf("--")+2 ,doubanidtitle.length) %>
+            <li ><a href="#" id="<%- doubanid %>"  class="mlist"  onclick="nextMovie(<%- doubanid %>)" ><i class="fa fa-film"></i><%- doubantitle %></a></li>
+
+
+             <% }) %>
+         </ul>
+    </div>
+<% } %>
+
+
+<script>
+
+    var firstmovie = $('ul.tag-widget-list a:first')
+
+    var movielist =  $('ul.tag-widget-list li')
+
+
+    if (movielist.length < 2){
+        $('.tags-widget.widget').hide()
+    }
+
+
+    var doubanid = firstmovie.attr('id')
+
+    var movieinfoid = doubanid
+
+    var movieclassicsid = doubanid
+    var videobymovieid = doubanid
+
+    firstmovie.addClass(" selected ")
+
+    $("#tab-link1").click()
+    $("#tab-link1").addClass('active')
+    $(".tab-content:first").addClass('active')
+
+
+    function nextMovie(id){
+        if(doubanid == id){
+        } else {
+
+            doubanid = id
+
+            $('ul.tag-widget-list a').removeClass("selected")
+            $("#" + doubanid).addClass("selected")
+
+            var tabSelected = $('.tab-content.active').attr('id')
+
+            switch(tabSelected)
+            {
+                case 'movieinfo':
+                    getNextMovieInfo(function callback(result){
+                        if(result == 'done'){
+                            getNextVideoByMovie();
+                        }
+                    })
+                    break;
+                case 'movieClassics':
+                    getNextMovieClassics(function callback(result){
+                        if(result == 'done'){
+                            getNextVideoByMovie();
+                        }
+                    })
+                    break;
+                case 'movieComments':
+                    getComments(function callback(result){
+                        if(result == 'done'){
+                            getNextVideoByMovie();
+                        }
+                    })
+                    break;
+            }
+        }
+    }
+
+    //根据豆瓣ID查询电影详情,返回豆瓣的JSON数据
+    function getDoubanDetail(alt, callback) {
+        alt = 'http://api.douban.com/v2/movie/subject/' + alt + '?callback=?'
+        $.getJSON(alt).done(function (data) {
+            //返回获取的JSON对象数据
+            gMOVIE.update = $.now();
+            gMOVIE.douban = data;
+            callback(gMOVIE);
+        }).fail(function (err) {
+            callback(err);
+        });
+    }
+
+    function getNextMovieInfo(callback){
+
+        var movieid = doubanid
+
+        if (movieinfoid != doubanid){
+            $.ajax({
+                type: 'get',
+                cache:true,
+                url: '/api/getnextmovieinfo/' + movieid ,
+                success: function (movieInfo) {
+                    if (movieInfo.douban.id) {
+
+                        $('#movieinfo').html('')
+                        $('#movieinfo').hide()
+
+                        var movieinfohtml =
+
+                                '<div class="row"><div class="col-md-5">' +
+                                '<img alt="" src="' + movieInfo.douban.images.medium +
+                                '"><hr/>' +
+                                '<h4>' + movieInfo.douban.title + '</h4>' +
+                                '<h6>' + movieInfo.douban.original_title + '</h6>' +
+                                '<div class="row"><div class="col-md-12">' +
+
+
+
+                                '<p>' +  movieInfo.douban.genres + '</p>' +
+                                '<p>' +  movieInfo.imdb.Genre + '</p>' +
+                                '<hr/></div></div> </div>' +
+
+                                '<ul class="popular-product col-md-7"><li><h5><img alt="" src="/images/douban.png" style="width: 24px">' +
+                                '<span>' +  movieInfo.douban.rating.average + '</span>' +
+                                '<small>（' +  movieInfo.douban.ratings_count + '人评分）</small>' +
+
+                                '</h5></li><li><h5><img alt="" src="/images/imdb.png" style="width: 24px">' +
+                                '<span>' +  movieInfo.imdb.imdbRating + '</span>' +
+                                '<small>（' +  movieInfo.imdb.imdbVotes + '人评分）</small>' +
+
+                                '</h5></li><li><h5><img alt="" src="/images/tomato.png" style="width: 24px">' +
+                                '<span>' +  movieInfo.imdb.tomatoUserRating * 2 + '</span>' +
+                                '<small>（' +  movieInfo.imdb.tomatoUserReviews + '人评分）</small>' + '</h5></li>';
+
+
+                        if (movieInfo.metacritic){
+
+                            movieinfohtml = movieinfohtml +
+                                    '<li><h5><img alt="" src="/images/metacritic-user.png" style="width: 24px">' +
+                                    '<span>' +  movieInfo.metacritic.officeRating + '</span>' +
+                                    '<small>（' +  movieInfo.metacritic.officeCount + '人评分）</small>' +
+                                    '</h5></li><li><h5><img alt="" src="/images/metacritic-critic.png" style="width: 24px">' +
+                                    '<span>' +  movieInfo.metacritic.userRating + '</span>' +
+                                    '<small>（' + movieInfo.metacritic.userCount + '人评分）</small></h5></li>'
+
+                        }
+
+
+
+                        movieinfohtml = movieinfohtml +
+
+
+                                '<li><h6><img alt="" src="/images/dollar.png"style="width: 24px"> 北美票房' +  movieInfo.imdb.BoxOffice + '</h6>' +
+                                '</li><li><h6><img alt="" src="/images/rate.png" style="width: 24px"> 电影评级 ' +  movieInfo.imdb.Rated +
+                                '</h6></li></ul></div><div class="row"><div class="col-md-12"><h6>导演</h6>' +
+
+                                '<p>' + movieInfo.douban.directors[0].name + '</p>' +
+
+                                '<p>' + movieInfo.imdb.Director + '</p>' +  '<h6>演员</h6><p>' ;
+
+
+
+                        movieInfo.douban.casts.forEach(function(cast,index){
+                            movieinfohtml = movieinfohtml + cast.name
+                        })
+
+                        movieinfohtml = movieinfohtml +
+
+                                '</p><p>' +  movieInfo.imdb.Actors + '</p><hr/></div></div><div class="row"><div class="col-md-12"><h6>简介</h6>' +
+
+                                '<p>' +  movieInfo.douban.summary + '</p>' +
+                                '</div></div><div class="row"><div class="col-md-12"><hr/><h6>Plot</h6>' +
+
+                                '<p>' +  movieInfo.imdb.Plot + '</p></div></div>' ;
+
+                        movieinfohtml = '<ul class="post-popular" >' + movieinfohtml + '</ul>'
+
+                        movieinfoid = doubanid;
+                        $('#movieinfo').append(movieinfohtml)
+                        $('#movieinfo').fadeIn(2000)
+                        callback('done')
+
+                    }
+                },
+                error: function (err) {
+                    callback(err)
+                    console.log(err)
+                }
+            });
+        }else {
+        }
+    }
+
+    function getNextMovieClassics(){
+
+        var movieid = doubanid
+
+        if (doubanid != movieclassicsid) {
+            $.ajax({
+                type: 'get',
+                cache: true,
+                url: '/api/getnextmovieclassics/' + movieid ,
+                success: function (movieClassics) {
+                    if (movieClassics.length > 0) {
+
+                        $('#movieClassics').html('')
+
+                        var movieClassicsHTML = '';
+
+
+                        movieClassics.forEach(function(movieClass,index){
+                            movieClassicsHTML = movieClassicsHTML +
+                                    '<div><a href="/classics/' +  movieClass.eName + '" target="_blank">' +
+                                    '<img class="img-thumbnail" src="' + movieClass.logo + '"></a>' +
+                                    '<h5>' + movieClass.cName + '</h5>' +
+                                    '<p>' + movieClass.shortDescription + '</p></div>'
+
+                        })
+
+                        movieclassicsid = doubanid;
+                        $('#movieClassics').append(movieClassicsHTML)
+
+                    }else{
+
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                    callback(err)
+
+                }
+            });
+        }else{
+        }
+    }
+
+
+
+
+    function getNextVideoByMovie(callback){
+
+        var movieid = doubanid
+
+        if (doubanid != videobymovieid) {
+
+            $.ajax({
+                type: 'post',
+                cache: true,
+                url: '/api/getnextvideobymovie/' + movieid ,
+                data: {
+                    movieid: movieid,
+                },
+                success: function (videoByMovies) {
+
+                    if (videoByMovies.length > 0) {
+
+                        $('#movieByVideo').hide()
+                        $('#movieByVideo').html('')
+
+
+                        var movieByVideoHTML = '';
+
+
+                        videoByMovies.forEach(function(video){
+                            movieByVideoHTML = movieByVideoHTML +
+                                    '<div class="work-post web-design brochures col-md-3 col-sm-4 col-xs-6" style="height: 155px" >'  +
+                                    '<div class="work-post-gal">' +
+                                    '<img alt="" src="' +  video.thumbnail  + '">' +
+                                    '<span class="jutou' + video.videoSpoiler + '">剧透</span>' ;
+
+                            if (video.videoType == 'professional' ){
+
+                                movieByVideoHTML = movieByVideoHTML + '<span class="lanpian">专业</span>'
+
+                            }
+
+                            if (video.videoType == 'complaint' ){
+
+                                movieByVideoHTML = movieByVideoHTML + '<span class="lanpian">吐槽</span>'
+
+                            }
+
+                            if (video.videoType == 'minutes' ){
+
+                                movieByVideoHTML = movieByVideoHTML + '<span class="lanpian">讲解</span>'
+
+                            }
+
+                            movieByVideoHTML = movieByVideoHTML +
+                                    '<div class="hover-box">' +
+                                    '<a class="page" href="/videos/watch/' + video.id + '" target="_blank"></a>' +
+                                    '</div><span class="author"><img alt="" class="img-circle" src="/author/' + video.user.id + '_logo.jpeg" style="width: 32px"></span>' +
+                                    '<span class="derution">' +  parseInt(video.duration / 60 % 60) + ':'+ (video.duration % 60) + '</span>' +
+                                    '</div><div><h6>' + video.title + '</h6></div></div>'
+                        })
+
+
+
+                        videobymovieid = doubanid
+
+                        $('#movieByVideo').append(movieByVideoHTML)
+                        $('#movieByVideo').fadeIn(2000)
+                        callback('done')
+
+
+                    }else{
+                        $('#movieByVideo').html('<p>没有找到相关视频</p>')
+
+
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }else{
+        }
+    }
+
+
+</script>

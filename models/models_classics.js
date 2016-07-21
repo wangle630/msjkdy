@@ -99,21 +99,25 @@ exports.updateClassic = function (gCLASSIC, callback) {
 }
 
 
-//一次获取18篇文章
-exports.getEighteenClassics = function(page,num, callback) {
+//一次获取18个合集
+exports.getEighteenClassics = function(tag,page,num, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
         }
-        //读取 posts 集合
-
         db.collection(settings.col_classics, function (err, collection) {
             if (err) {
                 mongodb.close();
                 return callback(err);
             }
             var query = {};
+
+            if (tag) {
+                query = {
+                    'tags': tag
+                };
+            }
             collection.count(query, function (err, total) {
                 collection.find(query, {
                     skip: (page - 1)*num,
@@ -132,3 +136,52 @@ exports.getEighteenClassics = function(page,num, callback) {
     });
 };
 
+//获取tags  并用distinct去重
+exports.getTags = function(callback){
+    mongodb.open(function(err,db){
+        if(err){
+            return callback(err);
+        }
+        db.collection(settings.col_classics,function(err,collection){
+            if(err){
+                mongodb.close();
+                return callback(err);
+            }
+
+            collection.distinct("tags",function(err,tags){
+                mongodb.close();
+                if(err){
+                    return callback(err);
+                }
+                callback(null,tags)
+            })
+        })
+    })
+}
+
+//一次获取18个合集
+exports.getClassicsByMovie = function(movieid , callback) {
+
+    console.warn(movieid)
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        db.collection(settings.col_classics, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            var query = {doubanid :movieid};
+
+                 collection.find(query).toArray(function (err, classics) {
+                    mongodb.close();
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback(null, classics);
+                });
+        });
+    });
+};

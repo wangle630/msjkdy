@@ -1,0 +1,24 @@
+<!-- content
+			================================================== -->
+
+
+<div class="container">
+    <div class="tags-widget widget">
+        <ul class="tag-widget-list">
+
+            <li><a href="/classics/"><i class="fa fa-tags"></i>所有</a></li>
+
+            <% tags.forEach(function (tag) { %>
+            <% if (tag == gg ) { %>
+            <li><a href="#" class="selected"><i class="fa fa-tag"></i><%= tag %></a></li>
+            <% } else { %>
+            <li><a href="/classics/tag/<%= tag %>"><i class="fa fa-tag"></i><%= tag %></i></a></li>
+            <% } %>
+            <% }) %>
+        </ul>
+    </div>
+</div>
+<!-- End content -->
+
+
+

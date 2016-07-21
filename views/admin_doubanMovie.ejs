@@ -74,6 +74,8 @@
         <hr/>
         <button class="btn btn-success btn-sm" onclick="getDoubanComments()">获取豆瓣评论信息</button>
         <hr/>
+        <button class="btn btn-success btn-sm" onclick="getMetacriticInfo()">获取metacritic信息</button>
+        <hr/>
     </div>
 </div>
 
@@ -152,6 +154,29 @@
                 type: 'post',
                 url: '/getcomments',
                 data: {
+                    doubId: gMOVIE.douban.id,
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        } else {
+            alert('没有电影数据呢')
+        }
+    }
+
+
+    //根据imdb ID，获取 metaritic 信息
+    function getMetacriticInfo() {
+        if (gMOVIE.imdb.imdbID) {
+            $.ajax({
+                type: 'post',
+                url: '/getmetacritic',
+                data: {
+                    imdbID: gMOVIE.imdb.imdbID,
                     doubId: gMOVIE.douban.id,
                 },
                 success: function (data) {

@@ -1,0 +1,53 @@
+<%- include header.ejs %>
+
+<div id="content">
+    <%- include banner.ejs %>
+
+    <!-- blog-box Banner -->
+    <div class="blog-box with-sidebar">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12 blog-side">
+                    <div id="content">
+                        <!-- blog-box Banner -->
+                        <div class="blog-box with-nosidebar ">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="single-post-content">
+                                        <div class="col-md-8">
+                                            <img alt="" src="<%= classic.banner %>">
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <h2><%= classic.cName %></h2>
+                                            <p><%= classic.shortDescription %></p>
+                                            <p><%= classic.longDescription %></p>
+                                            <%- include list_tags.ejs %>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+                                <%- include list_movies.ejs %>
+                                <%- include page.ejs %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+             </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- End content -->
+
+
+<%- include footer.ejs %>

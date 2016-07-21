@@ -36,21 +36,22 @@ exports.saveMovieInfo = function (req, res) {
 exports.movies = function (req, res) {
     //判断是否是第一页，并把请求的页数转换成 number 类型
     var page = req.query.p ? parseInt(req.query.p) : 1;
+    var num = 18
     //查询并返回第 page 页的 10 篇文章
-    movie.getEighteenMovies(null, page, function (err, movies, total) {
+    movie.getMoviesByClassic(null, page,num, function (err, movies, total) {
         if (err) {
             movies = [];
         }
         console.log(total)
-        res.render('movies', {
+        res.render('home_movies', {
             title: 'movies',
             header:'showMovieList',
             movies: movies,
             total: total,
-            totalPage: Math.ceil(total/18),
+            totalPage: Math.ceil(total/num),
             page: page,
             isFirstPage: (page - 1) == 0,
-            isLastPage: ((page - 1) * 18 + movies.length) == total,
+            isLastPage: ((page - 1) * num + movies.length) == total,
             user: req.session.user,
             success: req.flash('success').toString(),
             error: req.flash('error').toString()
@@ -89,3 +90,19 @@ exports.saveMovieInfo = function (req, res) {
         }
     })
 };
+
+
+//API获取电影信息
+exports.getNextMovieInfo = function(req,res){
+
+    var doubanid = req.params.movieid;
+
+    movie.findMovieInfo(doubanid, function (err, movieResult) {
+        if (err) {
+            res.send('电影查询出错了')
+        } else if (movieResult) {
+            res.send(movieResult)
+        }
+    })
+
+}

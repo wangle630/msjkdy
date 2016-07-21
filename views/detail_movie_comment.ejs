@@ -1,11 +1,15 @@
 <div class="tabs-widget widget">
     <ul class="tab-links">
-        <li><a class="tab-link1 active" href="#"> 电影信息</a></li>
-        <li><a class="tab-link2 " href="#" onclick="getComments()"> 短评论</a></li>
+        <li><a id="tab-link1"  class="tab-link1 active" href="#" onclick="getNextMovieInfo()"> 电影信息</a></li>
+        <li><a id="tab-link2"  class="tab-link2  " href="#" onclick="getNextMovieClassics()"> 包含集合</a></li>
+        <li><a id="tab-link1"  class="tab-link3 " href="#" onclick="getComments()"> 短评论</a></li>
     </ul>
-    <div class="tab-box">
-        <div class="tab-content active">
-            <ul class="post-popular">
+
+
+
+    <div class="tab-box" style="min-height: 800px;">
+        <div class="tab-content active" id = "movieinfo" >
+            <ul class="post-popular" >
                 <div class="row">
                     <div class="col-md-5">
 
@@ -28,54 +32,60 @@
                     </div>
 
 
-                    <ul class="post-popular col-md-7">
+                    <ul class="popular-product col-md-7">
+                        <li>
+                            <h5><img alt="" src="/images/douban.png" style="width: 24px">
+                                <span><%- movieInfo.douban.rating.average %></span>
+                                <small>（<%- movieInfo.douban.ratings_count %>人评分）</small>
+                            </h5>
+                        </li>
 
+                        <li>
+                            <h5><img alt="" src="/images/imdb.png" style="width: 24px">
+                                <span><%- movieInfo.imdb.imdbRating %></span>
+                                <small>（<%- movieInfo.imdb.imdbVotes %>人评分）</small>
+                            </h5>
+                        </li>
 
+                        <li>
+                            <h5><img alt="" src="/images/tomato.png" style="width: 24px">
+                                <span><%- movieInfo.imdb.tomatoUserRating * 2 %></span>
+                                <small>（<%- movieInfo.imdb.tomatoUserReviews %>人评分）</small>
+                            </h5>
 
+                        </li>
 
+                        <% if(movieInfo.metacritic) { %>
 
+                        <li>
+                            <h5><img alt="" src="/images/metacritic-user.png" style="width: 24px">
+                                <span><%- movieInfo.metacritic.officeRating %></span>
+                                <small>（<%- movieInfo.metacritic.officeCount %>人评分）</small>
+                            </h5>
 
-                        <div>
-                            <h6><img alt="" src="/images/douban.png" style="width: 24px"> <%- movieInfo.douban.rating.average %> （<%- movieInfo.douban.ratings_count %>人评分）</h6>
-                            <hr/>
+                        </li>
+                        <li>
+                            <h5><img alt="" src="/images/metacritic-critic.png" style="width: 24px">
+                                <span><%- movieInfo.metacritic.userRating %></span>
+                                <small>（<%- movieInfo.metacritic.userCount %>人评分）</small>
+                            </h5>
 
-                        </div>
+                        </li>
 
+                        <% } %>
 
-                        <div>
-                            <h6><img alt="" src="/images/imdb.png" style="width: 24px"> <%- movieInfo.imdb.imdbRating %> （<%- movieInfo.imdb.imdbVotes %>人评分）</h6>
-                            <hr/>
-
-                         </div>
-
-
-                        <div>
-                            <h6><img alt="" src="/images/tomato.png"
-                                     style="width: 24px"> <%- movieInfo.imdb.tomatoUserRating * 2 %> （<%- movieInfo.imdb.tomatoUserReviews %>人评分）</h6>
-                            <hr/>
-
-                         </div>
-
-
-                        <div>
+                        <li>
                             <h6><img alt="" src="/images/dollar.png"
                                      style="width: 24px"> 北美票房 <%- movieInfo.imdb.BoxOffice %></h6>
+                        </li>
 
-                            <hr/>
-
-                        </div>
-
-
-                        <div>
-                            <h6><img alt="" src="/images/rate.png" style="width: 24px"> 电影评级 <%- movieInfo.imdb.Rated %></h6>
-                            <hr/>
-
-                        </div>
-
+                        <li>
+                            <h6><img alt="" src="/images/rate.png" style="width: 24px"> 电影评级 <%- movieInfo.imdb.Rated %>
+                            </h6>
+                        </li>
 
                     </ul>
                 </div>
-
 
 
                 <div class="row">
@@ -123,14 +133,36 @@
 
             </ul>
         </div>
-        <div class="tab-content">
-            <ul class="post-recent" id="movieComments">
+
+        <div class="tab-content" id = "movieClassics">
+            <ul class="post-recent" >
+
+                <% if (classicByMovie.length > 0) { %>
+                <% classicByMovie.forEach(function (classic) { %>
+
+                <div>
+
+                    <a href="/classics/<%= classic.eName %>" target="_blank"><img class="img-thumbnail" alt=""
+                                                                                  src="<%= classic.logo %>"> </a>
+                    <h5><%= classic.cName %></h5>
+
+                    <p><%= classic.shortDescription %></p>
+                </div>
+
+                <% }) %>
+                <% }  else { %>
+                <div>暂无相关合集</div>
+                <% } %>
+            </ul>
+        </div>
+        <div class="tab-content" id="movieComments">
+            <ul class="post-comments" >
                 <li>
                     <a href="#" onclick="getComments()"><i class="fa  fa-refresh"> 刷新试试</i></a>
 
                 </li>
                 <li>
-                     <h6><a href="#">没有找到评论</a></h6>
+                    <h6><a href="#">没有找到评论</a></h6>
                 </li>
             </ul>
         </div>
@@ -138,31 +170,74 @@
 </div>
 
 
-
-
 <script>
-    function getComments() {
-        var movieid = '<%- videoInfo.doubanid[0] %>';
+    function getComments(callback) {
+        var movieid = doubanid;
+
         $.ajax({
             type: 'get',
-            cache:false,
+            cache: false,
             url: '/api/getcomments/' + movieid + '/' + '13',
             success: function (comments) {
+
+                var movieCommentsHTML = '';
+
                 if (comments.length > 0) {
 
-                    $('#movieComments').html('<li><a href="#" onclick="getComments()"><i class="fa  fa-refresh"> 换一批</i></a></li>')
+                    movieCommentsHTML = '<div><a href="#####" onclick="getComments(function callback(result){})">换一批<i class="fa fa-refresh"> </i></a></div>'
 
-                    var tr = '' ;
 
                     for (var i = 0; i < comments.length; i++) {
 
-                        tr = tr + '<li><h6> ' +  '<img alt="" src="/images/'+comments[i].sourcesite +'.png" style="width: 16px">' +'&nbsp'+ comments[i].avatar +'-'+comments[i].crate +   '</h6><h6> ' +  comments[i].comment +  ' </h6> </li>'
+                        movieCommentsHTML = movieCommentsHTML + '<li id="'+ comments[i]._id + '"><h6> ' + '<img alt="" src="/images/' + comments[i].sourcesite + '.png"  >' + '&nbsp' ;
 
-                     }
+                        if (comments[i].office){
+                            movieCommentsHTML = movieCommentsHTML +  comments[i].office + '-'
+                        }
 
-                    tr = tr + '<li><a href="#" onclick="getComments()"><i class="fa  fa-refresh"> 换一批</i></a></li>'
-                     $('#movieComments').append(tr)
-                    tr.fadeIn(8000)
+                        movieCommentsHTML = movieCommentsHTML + comments[i].avatar + '-' + '<span>' + comments[i].crate + '</span></h6>'
+
+
+                        var commentClen = strClen(comments[i].comment)
+                        var commentElen = strElen(comments[i].comment)
+
+                        if ( commentClen > 180 || commentElen > 180 ){
+
+                            if(commentClen > commentElen){
+                                movieCommentsHTML = movieCommentsHTML +
+                                        '<p class="short"> ' + comments[i].comment.substring(0,80) + ' . . . '
+                                        '<a   href="####" onclick=show("'+ comments[i]._id +'")>展 开 <i class="fa fa-chevron-circle-down"></i></a>' + ' </p> ' +
+                                        '<p style="display:none" class="long"> ' + comments[i].comment +
+                                        '<a   href="####" onclick=show("'+ comments[i]._id +'")>收 起 <i class="fa fa-chevron-circle-up"></i></a>' + ' </p> ' +
+                                        '</li>'
+                            } else {
+                                movieCommentsHTML = movieCommentsHTML +
+                                        '<p class="short"> ' + comments[i].comment.substring(0,160) + ' . . . ' +
+                                '<a   href="####" onclick=show("'+ comments[i]._id +'")>展 开 <i class="fa fa-chevron-circle-down"></i></a>' + ' </p> ' +
+                                '<p style="display:none" class="long"> ' + comments[i].comment +
+                                '<a   href="####" onclick=show("'+ comments[i]._id +'")>收 起 <i class="fa fa-chevron-circle-up"></i></a>' + ' </p> ' +
+                                '</li>'
+                            }
+
+                        } else{
+                            movieCommentsHTML = movieCommentsHTML+
+                                    '<p class="short"> ' + comments[i].comment + ' </p> ' +
+                                    '</li>'
+                        }
+                    }
+
+                    movieCommentsHTML = movieCommentsHTML + '<div><a href="####" onclick="getComments()">换一批<i class="fa fa-refresh"></i></a></div>'
+
+                    movieCommentsHTML = '<ul class="movie-comments" >' + movieCommentsHTML + '</ul>'
+                    $('#movieComments').html(movieCommentsHTML)
+                    callback('done')
+
+                }else{
+                    movieCommentsHTML = '<div><a class = "changealot" href="####" onclick="getComments()">换一批<i class="fa  fa-refresh"></i></a></div>'
+                    movieCommentsHTML = '<ul class="movie-comments" >' + movieCommentsHTML + '</ul>'
+                    $('#movieComments').html(movieCommentsHTML)
+                    callback('done')
+
 
                 }
             },
@@ -170,5 +245,37 @@
                 console.log(err)
             }
         });
+    }
+
+    function show(aaa){
+        $("#" + aaa +  " p.short").toggle()
+        $("#" + aaa +  " p.long").toggle()
+        return false
+    }
+
+    function strClen(str){
+        var len = 0;
+        for (var i=0; i<str.length; i++) {
+            var c = str.charCodeAt(i);
+            //单字节加1
+            if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+            }
+            else {
+                len+=2;
+            }
+        }
+        return len;
+    }
+
+    function strElen(str){
+        var len = 0;
+        for (var i=0; i<str.length; i++) {
+            var c = str.charCodeAt(i);
+            //单字节加1
+            if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+                len++;
+            }
+        }
+        return len;
     }
 </script>

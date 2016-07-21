@@ -1,70 +1,77 @@
 、
 
-
-<div id="content">
-    <!-- blog-box Banner -->
-    <div class="blog-box with-nosidebar">
-        <div class="container">
-            <ul class="filter">
-                <li><a href="#" class="active"><i class="fa fa-th"></i>所有</a></li>
-                <li><a href="/">经典</a></li>
-                <li><a href="/movies">恐怖猎奇</a></li>
-                <li><a href="/videos">电视剧</a></li>
-                <li><a href="#">烧脑悬疑</a></li>
-                <li><a href="#">烂片</a></li>
-            </ul>
-
             <div class="row">
 
                 <% movies.forEach(function (movie, index) { %>
                 <div class="col-md-2 col-sm-4 col-xs-6">
                     <div class="item news-item">
                         <div class="inner-item">
-                            <img alt=""
-                                 src="<%= movie.douban.images.large ? movie.douban.images.large : movie.douban.images.small %>">
+                            <img alt="" class="poster" src="<%= movie.douban.images.large %>">
 
                             <div class="hover-item">
                                 <ul>
-                                    <li><a class="autor" href="#"><img alt="" src="/images/douban.png" style="width: 24px">
-                                            豆瓣：<%= movie.douban.rating.average %></a></li>
+                                    <li><span class="douban" href="#"><img alt="" src="/images/douban.png" >
+                                            豆瓣：<%= movie.douban.rating.average %></span></li>
                                     <% if(movie.imdb) { %>
                                     <% if(movie.imdb.imdbRating > 1) { %>
-                                    <li><a class="date" href="#"><i class="fa fa-clock-o"></i>
-                                            imdb：<%= movie.imdb.imdbRating %></a></li>
+                                    <li><span class="imdb" href="#"><img alt="" src="/images/imdb.png" >
+                                            imdb：<%= movie.imdb.imdbRating %></span></li>
                                     <% if(movie.imdb.tomatoRating != 'N/A') { %>
-                                    <li><a class="comment-numb" href="#"><i class="fa fa-user"></i>
-                                            tomato：<%= movie.imdb.tomatoRating %></a></li>
+                                    <li><span class="tomato" href="#"><img alt="" src="/images/tomato.png" ></i>
+                                            tomato：<%= movie.imdb.tomatoRating %></span></li>
                                     <% } %>
+
+                                    <% if(movie.metacritic) { %>
+                                    <li><span class="metacritic" href="#"><img alt="" src="/images/metacritic-user.png" ></i>
+                                            metacritic：<%= movie.metacritic.officeRating %></span></li>
+                                    <% } %>
+
                                     <% if(movie.imdb.Rated != 'N/A') { %>
-                                    <li><a class="comment-numb" href="#"><i class="fa fa-comments"></i>
-                                            评级：<%= movie.imdb.Rated %></a></li>
+                                    <li><span class="rated" href="#"><img alt="" src="/images/rate.png" ></i>
+                                            评级：<%= movie.imdb.Rated %></span></li>
                                     <% } %>
+
+
                                     <% } %>
                                     <% } %>
 
                                 </ul>
                             </div>
                         </div>
-                        <h5><%= movie.douban.title %></h5>
+                        <h5><%= movie.douban.title %><span> <%= movie.douban.year %> <%= movie.douban.countries %></span></h5>
 
-                        <p><%= movie.douban.summary.substring(0, 60) %>.... </p>
-                    </div>
-                    <div style="bottom: 10px;margin-bottom: 11px;">
-                        <a class="read-more" href="single-post.html">read more <i class="fa fa-arrow-right"></i></a>
+
+
+
+
+
+                        <div style="bottom: 10px;margin-bottom: 15px;" class ="btn-block">
+                            <% if(movie.videoid) { %>
+
+                            <a class="read-film  " href="/videos/watch/<%= movie.videoid[0]%>"><%= movie.videoid.length%><i class="fa fa-video-camera"></i></a>
+                            <% } else { %>
+
+                            <a class="read-film " href="#" disabled="disabled"> 0 <i class="fa fa-video-camera"></i></a>
+
+
+                            <% } %>
+
+                            <% if(movie.filmid) { %>
+
+                            <a class="read-film " href="/films/watch/<%= movie.filmid[0]%>"><%= movie.filmid.length%><i class="fa fa-film"></i></a>
+
+                            <% } %>
+
+                        </div>
+                        <h6><%= movie.douban.summary%> </h6>
 
                     </div>
                 </div>
-
                 <% }) %>
-
             </div>
-            <%- include page.ejs %>
 
 
-        </div>
-    </div>
 
-</div>
 <!-- End content -->
 
 

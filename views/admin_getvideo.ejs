@@ -74,8 +74,13 @@
                 <div class="col-md-12">
                     </br>
                     <h4 class="text-info col-md-10">豆瓣电影</h4>
-                        <textarea name="name" class="input-sm" placeholder="电影ID数组" id="doubanidlist"
-                                  value="" style="font-size: 18px"></textarea>
+                        <textarea name="name" class="input-sm" placeholder="电影ID数组" id="doubanidtitlelist"
+                                  value="" style="font-size: 14px"></textarea>
+
+                    </br>
+                    <h4 class="text-info col-md-10">豆瓣电影</h4>
+                        <textarea name="name" class="input-sm" placeholder="电影ID+Title数组" id="doubanidlist"
+                                  value="" style="font-size: 14px"></textarea>
                 </div>
             </div>
 
@@ -104,15 +109,24 @@
     //保存youku视频信息
     function saveYoukuInfo() {
 
-        var movielist = $("#doubanidlist").val();
-        var moviearray = []
-        if( movielist.length > 1 ){
-            moviearray = movielist.split(",")
+        var movieidlist = $("#doubanidlist").val();
+        var movieidtitlelist = $("#doubanidtitlelist").val();
+        var movieidarray = []
+        var movieidtitlearray = []
+        if( movieidlist.length > 1 ){
+            movieidarray = movieidlist.split(",")
+        }
+        if( movieidtitlelist.length > 1 ){
+            movieidtitlearray = movieidtitlelist.split(",")
         }
 
-        if (moviearray.length > 0)
+        console.log(movieidarray)
+        console.log(movieidtitlearray)
+
+        if (movieidarray.length > 0)
         {
-            gYOUKUDATA.doubanid = moviearray
+            gYOUKUDATA.doubanid = movieidarray
+            gYOUKUDATA.doubanidtitle = movieidtitlearray
             gYOUKUDATA.videoType = getRadioValue('radioVideoType');
             gYOUKUDATA.videoSpoiler = getRadioValue('radioVideoSpoiler');
             gYOUKUDATA.update = $.now();
@@ -183,21 +197,52 @@
     function inputVideos() {
         if (gMOVIE.douban.id) {
             var doubanid = gMOVIE.douban.id
-            var movielist = $("#doubanidlist").val();
-            var moviearray = []
-            if( movielist.length > 1 ){
-                moviearray = movielist.split(",")
+            var title = gMOVIE.douban.title
+
+            var movieidtitlelist = $("#doubanidtitlelist").val();
+            var movieidlist = $("#doubanidlist").val();
+            var movieidtitlearray = []
+            var movieidarray = []
+
+
+
+            if( movieidtitlelist.length > 1 ){
+                movieidtitlearray = movieidtitlelist.split(",")
             }
+
+
+            if( movieidlist.length > 1 ){
+                movieidarray = movieidlist.split(",")
+            }
+
             var ifpush = 0;
-            for(var i =0;i < moviearray.length;i++){
-                if (moviearray[i] == doubanid){
+
+            for(var i =0;i < movieidtitlearray.length;i++){
+                if (movieidtitlearray[i] == doubanid + '--' + title ){
                     ifpush = 1
                 }
             }
+
+            var ifpushid = 0;
+
+            for(var i =0;i < movieidarray.length;i++){
+                if (movieidarray[i] == doubanid ){
+                    ifpushid = 1
+                }
+            }
+
+
+
             if(ifpush == 0){
-                 moviearray.push(doubanid);
-                $("#doubanidlist").val(moviearray);
+                movieidtitlearray.push(doubanid + '--' + title);
+                $("#doubanidtitlelist").val(movieidtitlearray);
              }
+
+
+            if(ifpushid == 0){
+                movieidarray.push(doubanid);
+                $("#doubanidlist").val(movieidarray);
+            }
         } else {
             alert('没有电影数据呢')
 

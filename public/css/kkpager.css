@@ -33,20 +33,20 @@
 }
 #kkpager span.curr{
 	float: left;
-	border: 1px solid #007aff;
+	border: 1px solid #ffc936;
 	display: inline;
 	padding: 3px 10px 3px 10px;
 	margin-right: 5px;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	background: #cdf7ff;
-	color: #007aff;
+	background: #ffd564;
+	color: #4c4145;
 }
 #kkpager a:hover{
-	border:1px solid #007aff;
-	background-color:#007aff;
-	color:#fff;
+	border:1px solid #ffc936;
+	background-color:#ffd564;
+	color:#4c4145;
 }
 #kkpager span.normalsize{
 }
@@ -91,7 +91,7 @@
 }
 
 #kkpager_btn_go_input.focus{
-	border-color:#007aff;
+	border-color:#ffc936;
 }
 
 #kkpager .pageBtnWrap{
@@ -106,7 +106,7 @@
 }
 
 #kkpager .currPageNum{
-	color:#007aff;
+	color:#ffc936;
 }
 
 #kkpager .infoTextAndGoPageBtnWrap{

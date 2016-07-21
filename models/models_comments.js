@@ -6,7 +6,7 @@ var mongodb = require('./db');
 var settings = require('../settings.js');
 
 //查找豆瓣评论已存在的评论id
-exports.findDoubanCommits = function(doubanid,callback){
+exports.findComments = function(doubanid,sourcesite,callback){
     mongodb.open(function(err,db){
         if(err){
             return callback(err);
@@ -20,7 +20,8 @@ exports.findDoubanCommits = function(doubanid,callback){
             }
 
             collection.find({
-                doubanid:doubanid
+                doubanid:doubanid,
+                sourcesite:sourcesite
             }).toArray(function(err,docs){
                 if(err){
                     mongodb.close();
@@ -34,7 +35,7 @@ exports.findDoubanCommits = function(doubanid,callback){
 
 
 //插入豆瓣评论信息
-exports.insertDoubanCommit = function(doubanCommit,callback){
+exports.insertComments = function(doubanCommit,callback){
     //打开数据库
     mongodb.open(function(err,db){
         if(err){
@@ -77,8 +78,6 @@ exports.getCommentsByMovieID = function (movieid,num,callback){
             }
 
             var query = { doubanid : movieid };
-
-            //var page  = 1;
 
             collection.count(query,function(err,total){
 

@@ -1,21 +1,14 @@
-<!-- content
-			================================================== -->
 <div class="portfolio-box with-4-col">
-
     <div class="container">
-
         <div class="portfolio-container">
-
-
             <% classics.forEach(function (classic) { %>
 
             <div class="work-post web-design brochures">
                 <div class="work-post-gal">
-                    <img alt="" src="upload/image1.jpg">
+                    <img alt="classicimg" src="<%= classic.logo %>">
 
                     <div class="hover-box">
-                        <a class="zoom video" href="http://www.youtube.com/watch?v=XSGBVzeBUbk"></a>
-                        <a class="page" href="single-project.html"></a>
+                        <a class="page" href="/classics/<%= classic.eName %>"></a>
                     </div>
                 </div>
                 <div class="work-post-content">
@@ -26,14 +19,12 @@
                 </div>
             </div>
 
-
-
             <% }) %>
 
         </div>
+    </div>
 
-
-
+    <div class="row">
+        <%- include page.ejs %>
     </div>
 </div>
-<!-- End content -->

@@ -15,7 +15,6 @@ var settings = require('../settings.js');
 exports.findMovieInfo = function (doubanid, callback) {
     mongodb.open(function (err, db) {
         if (err) {
-            console.log(err);
             return callback(err);
         }
         db.collection(settings.col_movies, function (err, collection) {
@@ -86,8 +85,8 @@ exports.updateMovieInfo = function (gMOVIE, callback) {
                 {
                     $set: {
                         update: gMOVIE.update,
-                        douban:gMOVIE.douban,
-                        imdb : gMOVIE.imdb
+                        douban: gMOVIE.douban,
+                        imdb: gMOVIE.imdb
                     }
                 },
                 function (err, result) {
@@ -104,32 +103,27 @@ exports.updateMovieInfo = function (gMOVIE, callback) {
 
 
 //一次获取18篇文章
-exports.getEighteenMovies = function(name, page, callback) {
+exports.getMoviesByClassic = function (classic, page, num, callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
         }
-        //读取 posts 集合
-
         db.collection(settings.col_movies, function (err, collection) {
             if (err) {
                 mongodb.close();
                 return callback(err);
             }
             var query = {};
-            if (name) {
-                query.name = name;
+            if (classic) {
+                query = {'douban.id': {$in: classic}};
             }
-            //使用 count 返回特定查询的文档数 total
             collection.count(query, function (err, total) {
-                //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
                 collection.find(query, {
-                    skip: (page - 1)*18,
-                    limit: 18
+                    skip: (page - 1) * num,
+                    limit: num
                 }).sort({
-                    "douban.rating.average" : -1,
-                    "imdb.imdbRating" : -1
+                    update: -1
                 }).toArray(function (err, movies) {
                     mongodb.close();
                     if (err) {
@@ -141,4 +135,104 @@ exports.getEighteenMovies = function(name, page, callback) {
         });
     });
 };
+
+
+//保存视频的时候更新电影信息
+exports.updateMovieByVideo = function (doubanid, videoid, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+
+        db.collection(settings.col_movies, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.updateMany(
+                {'douban.id': {$in: doubanid}},
+                {
+                    $addToSet: {videoid: videoid}
+                },
+                function (err, result) {
+                    if (err) {
+                        mongodb.close();
+                        return callback(err);
+                    }
+                    callback(null, result);
+
+                })
+        })
+    })
+}
+
+
+//保存完整影片的时候更新电影信息
+exports.updateMovieByFilm = function (doubanid, filmid, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+
+        db.collection(settings.col_movies, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.updateMany(
+                {'douban.id': {$in: doubanid}},
+                {
+                    $addToSet: {filmid: filmid}
+                },
+                function (err, result) {
+                    if (err) {
+                        mongodb.close();
+                        return callback(err);
+                    }
+                    callback(null, result);
+
+                })
+        })
+    })
+}
+
+
+//更新metacritic电影基本信息
+exports.updateMovieByMetacritic = function (metacriticInfo, doubanid, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回err信息
+        }
+
+        db.collection(settings.col_movies, function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回err信息
+            }
+            collection.updateOne(
+                {'douban.id': doubanid},
+                {
+                    $set: {
+                        metacritic: metacriticInfo
+                    }
+                },
+                function (err, result) {
+                    if (err) {
+                        mongodb.close();
+                        return callback(err);
+                    }
+                    callback(null, result);
+
+                })
+        })
+    })
+}
+
+
+
+
+
 

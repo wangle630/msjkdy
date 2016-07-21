@@ -1,44 +1,26 @@
 <!-- content
 			================================================== -->
 
-        <div class="container">
-
-
-            <div class="widget footer-widgets tag-widget">
-                <h4>作者</h4>
-                <ul class="tag-widget-list">
-                    <li><a href="/videos"><img alt="" src="/images/authors.png" style="width: 32px"> 所有</a></li>
-                    <li><a class = "btn-warning disabled" href="/videos/author/815294744"><img alt="" src="/author/815294744_logo.jpeg" style="width: 32px"  > 太阳实况解说</a></li>
-                    <li><a href="/videos/author/89324314" ><img alt="" src="/author/89324314_logo.jpeg" style="width: 32px"> 阿斗归来了</a></li>
-                    <li><a href="/videos/author/731571594"><img alt="" src="/author/731571594_logo.jpeg" style="width: 32px"> 谷阿莫</a></li>
-                    <li><a href="/videos/author/764201723"><img alt="" src="/author/764201723_logo.jpeg" style="width: 32px"> 大湿兄DSX</a></li>
-                    <li><a href="/videos/author/2759220"><img alt="" src="/author/2759220_logo.jpeg" style="width: 32px"> 小片片说大片</a></li>
-                    <li><a href="/videos/author/837279133"><img alt="" src="/author/837279133_logo.jpeg" style="width: 32px"> 超粒方</a></li>
-
-                </ul>
-            </div>
-
-
-
+<div class="container" xmlns="http://www.w3.org/1999/html">
             <div class="row">
                 <% videos.forEach(function (video) { %>
 
-                <div class="work-post web-design brochures col-lg-2 col-md-3 col-sm-4 col-xs-6" style="height: 155px">
+                <div class="work-post web-design brochures col-lg-2 col-md-3 col-sm-4 col-xs-6" style="min-height: 155px;height: 155px;">
                     <div class="work-post-gal">
-                        <img alt="" src="<%= video.thumbnail ? video.thumbnail : video.thumbnail_v2 %>">
-                        <span class="jutou<%= video.videoSpoiler %>">剧透</span>
+                        <img class="videoimg" alt="" src="<%= video.thumbnail ? video.thumbnail : video.thumbnail_v2 %>">
+                        <span  class="jutou<%= video.videoSpoiler %>">剧透</span>
 
 
                         <% if( video.videoType == 'professional') { %>
-                        <span class="lanpian">专业</span>
+                        <span class="videotype">专业</span>
                         <% } %>
 
                         <% if( video.videoType == 'complaint') { %>
-                        <span class="lanpian">吐槽</span>
+                        <span class="videotype">吐槽</span>
                         <% } %>
 
                         <% if( video.videoType == 'minutes') { %>
-                        <span class="lanpian">讲解</span>
+                        <span class="videotype">讲解</span>
                         <% } %>
 
                         <span class="author"><img alt="" class="img-circle" src="/author/<%= video.user.id%>_logo.jpeg" style="width: 32px"></span>
@@ -51,11 +33,12 @@
 
 
 
-                        <span class="derution"><%= video.duration %></span>
+                        <span class="derution"><%= parseInt(video.duration / 60 % 60) + ':'+ (video.duration % 60) %></span>
+                        <span class="publishdate"><%= video.published.substring(0,10) %></span>
                     </div>
-                    <div>
-                        <h6><%= video.title %></h6>
-                    </div>
+                    <div class="work-post-tit">
+                        <h6><%= video.title %><br/></h6>
+                     </div>
                 </div>
                 <% }) %>
 
@@ -66,4 +49,5 @@
 
 
 </div>
+
 <!-- End content -->
